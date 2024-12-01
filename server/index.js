@@ -25,14 +25,14 @@ app.post('/login', async (req, res) => {
         }
 
         const user = result.recordset[0];
+
         console.log(user);
-        console.log(password);
-        console.log(user.password);
+
 
         if (password !== user.password) {
             return res.status(400).send('Yanlış şifre', password, user.password);
         }
-        return res.status(200).send('Giriş başarılı');
+        return res.status(200).send(user);
     } catch (error) {
         console.log(error);
         res.status(500).send('Bir hata oluştu');

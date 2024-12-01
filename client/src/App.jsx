@@ -15,10 +15,11 @@ import Calculator from "./pages/Calculator";
 
 function App() {
   return (
-    <div>
+    <div className="bg-gray-100 min-h-screen">
       <Routes>
+        <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<PersonalInfo />} />
+        <Route path="/info" element={<PersonalInfo />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/course-list" element={<CourseList />} />

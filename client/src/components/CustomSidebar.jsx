@@ -1,17 +1,17 @@
-import React from "react";
+import React, {useContext} from "react";
 import { PanelMenu } from "primereact/panelmenu";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { useNavigate } from "react-router-dom";
-
+import { AuthContext } from "../context/AuthContext";
 
 const CustomSidebar = () => {
 
   const navigate = useNavigate();
-
+  const user = useContext(AuthContext);
   const items = [
-    { label: "Kişisel Bilgiler", icon: "pi pi-user", command: () => { navigate("/") }  },
+    { label: "Kişisel Bilgiler", icon: "pi pi-user", command: () => { navigate("/info") }  },
     {
       label: "Öğrenim",
       icon: "pi pi-graduation-cap",
@@ -37,7 +37,7 @@ const CustomSidebar = () => {
           alt="Profile"
           className="w-12 h-12 rounded-full mb-3"
         />
-        <h4 className="text-lg font-semibold">Eray ERCAN</h4>
+        <h4 className="text-lg font-semibold">{user.first_name +" "+ user.last_name}</h4>
         <div className="flex gap-2 mt-2">
           <i className="pi pi-flag text-white"></i>
           <i className="pi pi-home text-white"></i>
@@ -47,7 +47,7 @@ const CustomSidebar = () => {
         </div>
       </div>
       <div className="flex-1 p-4">
-        <PanelMenu model={items} className="w-full text-red-800 bg-blue-950" />
+        <PanelMenu model={items} className="w-full text-red-800 " />
       </div>
     </div>
   );
