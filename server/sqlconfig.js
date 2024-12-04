@@ -1,6 +1,6 @@
 const config = {
     server: 'localhost',       // sunucu adı
-    database: 'obs',
+    database: 'db_obs',
     options: {
         trustServerCertificate: true
     },

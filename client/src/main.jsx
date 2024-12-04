@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { PrimeReactProvider } from "primereact/api";
@@ -10,7 +9,6 @@ import App from "./App.jsx";
 import { AuthContextProvider } from "./context/AuthContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
     <BrowserRouter>
       <AuthContextProvider>
         <PrimeReactProvider>
@@ -18,5 +16,4 @@ createRoot(document.getElementById("root")).render(
         </PrimeReactProvider>
       </AuthContextProvider>
     </BrowserRouter>
-  </StrictMode>
 );

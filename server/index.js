@@ -18,7 +18,7 @@ app.post('/login', async (req, res) => {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('student_id', sql.Int, username)
-            .query('SELECT * FROM students WHERE student_id= @student_id');
+            .query('SELECT * FROM students WHERE StudentID= @student_ID');
 
         if (result.recordset.length === 0) {
             return res.status(400).send('Yanlış kullanıcı adı');
@@ -29,8 +29,8 @@ app.post('/login', async (req, res) => {
         console.log(user);
 
 
-        if (password !== user.password) {
-            return res.status(400).send('Yanlış şifre', password, user.password);
+        if (password !== user.Password) {
+            return res.status(400).send('Yanlış şifre', password, user.Password);
         }
         return res.status(200).send(user);
     } catch (error) {

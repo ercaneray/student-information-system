@@ -3,7 +3,7 @@ import { PanelMenu } from "primereact/panelmenu";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 
 const CustomSidebar = () => {
@@ -37,7 +37,7 @@ const CustomSidebar = () => {
           alt="Profile"
           className="w-12 h-12 rounded-full mb-3"
         />
-        <h4 className="text-lg font-semibold">{user.first_name +" "+ user.last_name}</h4>
+        <h4 className="text-lg font-semibold">{user.FirstName +" "+ user.LastName}</h4>
         <div className="flex gap-2 mt-2">
           <i className="pi pi-flag text-white"></i>
           <i className="pi pi-home text-white"></i>
