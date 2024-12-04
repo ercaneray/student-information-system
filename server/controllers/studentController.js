@@ -1,8 +1,8 @@
 const sql = require('mssql');
 const config = require('../config/sqlconfig.js');
 
-// GET all student
 
+// GET all student
 const getAllStudents = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -13,6 +13,7 @@ const getAllStudents = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
+
 // Get student by ID
 const getStudentByID = async (req, res) => {
     try {
@@ -28,8 +29,6 @@ const getStudentByID = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-
-
 
 // Create student
 const createStudent = async (req, res) => {
@@ -53,7 +52,6 @@ const createStudent = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-
 
 // Update student
 const updateStudent = async (req, res) => {
