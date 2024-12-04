@@ -24,6 +24,8 @@ const getStudentByID = async (req, res) => {
             WHERE StudentID = @StudentID`
             );
         res.status(200).json(result.recordset);
+        console.log(req.params);
+        console.log(req.body);
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -42,10 +44,9 @@ const createStudent = async (req, res) => {
             .input('Agno', sql.Decimal(3, 2), req.body.Agno)
             .input('Faculty', sql.VarChar, req.body.Faculty)
             .input('Department', sql.VarChar, req.body.Department)
-            .input('RoleID', sql.Int, req.body.RoleID)
-            .input('Classs', sql.Int, req.body.Classs)
-            .query(`INSERT INTO Students (StudentID, FirstName, LastName, Password, Agno, Faculty, Department, RoleID, Classs)
-                VALUES (@StudentID, @FirstName, @LastName, @Password, @Agno, @Faculty, @Department, @RoleID, @Classs)`);
+            .input('Class', sql.Int, req.body.Class)
+            .query(`INSERT INTO Students (StudentID, FirstName, LastName, Password, Agno, Faculty, Department, Class)
+                VALUES (@StudentID, @FirstName, @LastName, @Password, @Agno, @Faculty, @Department, @Class)`);
         res.status(201).json(result.recordset);
     } catch (error) {
         console.error(error); // Hata detaylarını logla
@@ -65,8 +66,7 @@ const updateStudent = async (req, res) => {
             .input('Agno', sql.Decimal(3, 2), req.body.Agno)
             .input('Faculty', sql.VarChar, req.body.Faculty)
             .input('Department', sql.VarChar, req.body.Department)
-            .input('RoleID', sql.Int, req.body.RoleID)
-            .input('Classs', sql.Int, req.body.Classs)
+            .input('Class', sql.Int, req.body.Classs)
             .query(`UPDATE Students
                 SET FirstName = @FirstName, 
                     LastName = @LastName, 
@@ -74,13 +74,13 @@ const updateStudent = async (req, res) => {
                     Agno = @Agno, 
                     Faculty = @Faculty, 
                     Department = @Department, 
-                    RoleID = @RoleID, 
-                    Classs = @Classs
+                    Class = @Class
                 WHERE StudentID = @StudentID`
             );
         res.status(200).json(result.recordset);
     } catch (error) {
         console.error(error);
+        console.log(req.body);
         res.status(404).send('An error occurred');
     }
 

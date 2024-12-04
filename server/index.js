@@ -6,7 +6,7 @@ const studentRoutes = require('./routes/studentRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 const app = express(); // Create express app
 

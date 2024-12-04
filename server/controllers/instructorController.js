@@ -40,9 +40,8 @@ const createInstructor = async (req, res) => {
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
             .input('Password', sql.VarChar, req.body.Password)
-            .input('RoleID', sql.Int, req.body.RoleID)
-            .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password, RoleID)
-                VALUES (@InstructorID, @FirstName, @LastName, @Password, @RoleID)`);
+            .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password)
+                VALUES (@InstructorID, @FirstName, @LastName, @Password)`);
         res.status(201).json(result.recordset);
     } catch (error) {
         console.error(error);
@@ -60,12 +59,10 @@ const updateInstructor = async (req, res) => {
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
             .input('Password', sql.VarChar, req.body.Password)
-            .input('RoleID', sql.Int, req.body.RoleID)
             .query(`UPDATE Instructors
                 SET FirstName = @FirstName, 
                     LastName = @LastName, 
                     Password = @Password, 
-                    RoleID = @RoleID
                 WHERE InstructorID = @InstructorID`
             );
         res.status(200).json(result.recordset);
