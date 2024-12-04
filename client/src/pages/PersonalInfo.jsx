@@ -12,22 +12,22 @@ const PersonalInfo = () => {
         <h1 className="text-xl font-bold">Özlük Bilgileri</h1>
         <div className="flex flex-row gap-4 mt-4">
           <InfoCard title="Öğrenci No">
-            <p>{user.student_id}</p>
+            <p>{user.StudentID}</p>
           </InfoCard>
           <InfoCard title="Ad Soyad">
-            <p>{user.first_name + " " + user.last_name}</p>
+            <p>{user.FirstName + " " + user.LastName}</p>
           </InfoCard>
           <InfoCard title="Fakülte">
-            <p>{user.faculty}</p>
+            <p>{user.Faculty}</p>
           </InfoCard>
           <InfoCard title="Bölüm">
-            <p>{user.department}</p>
+            <p>{user.Department}</p>
           </InfoCard>
           <InfoCard title="Sınıf">
-            <p>{user.class}</p>
+            <p>{user.Class}</p>
           </InfoCard>
           <InfoCard title="AGNO">
-            <p>{user.agno}</p>
+            <p>{user.Agno}</p>
           </InfoCard>
         </div>
       </div>

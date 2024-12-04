@@ -24,7 +24,7 @@ const CustomSidebar = () => {
     { label: "Mesajlaşma", icon: "pi pi-envelope", command: () => { navigate("/messages") }   },
     { label: "Mezuniyet İşlemleri", icon: "pi pi-briefcase", command: () => { navigate("/graduation") }   },
     { label: "Yardım", icon: "pi pi-question-circle", command: () => window.open("https://destek.atauni.edu.tr/kb/index.php") },
-    { label: "Çıkış", icon: "pi pi-sign-out" },
+    { label: "Çıkış", icon: "pi pi-sign-out", command: () => { navigate("/login") }   },
   ];
 
   
