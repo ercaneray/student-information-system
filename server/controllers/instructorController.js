@@ -1,8 +1,8 @@
 const sql = require('mssql');
 const config = require('../config/sqlconfig.js');
+const bcrypt = require('bcrypt');
 
 // GET all student
-
 const getAllInstructors = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -29,8 +29,6 @@ const getInstructorByID = async (req, res) => {
     }
 }
 
-
-
 // Create Instructor
 const createInstructor = async (req, res) => {
     try {
@@ -39,7 +37,7 @@ const createInstructor = async (req, res) => {
             .input('InstructorID', sql.Int, req.body.InstructorID)
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
-            .input('Password', sql.VarChar, req.body.Password)
+            .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
             .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password)
                 VALUES (@InstructorID, @FirstName, @LastName, @Password)`);
         res.status(201).json(result.recordset);
@@ -58,7 +56,7 @@ const updateInstructor = async (req, res) => {
             .input('InstructorID', sql.Int, req.body.InstructorID)
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
-            .input('Password', sql.VarChar, req.body.Password)
+            .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
             .query(`UPDATE Instructors
                 SET FirstName = @FirstName, 
                     LastName = @LastName, 

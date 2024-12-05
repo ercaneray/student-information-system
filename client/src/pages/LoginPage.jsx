@@ -2,28 +2,40 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useNavigate } from 'react-router'
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 function LoginPage() {
 
   const navigate = useNavigate()
   const { register, handleSubmit } = useForm()
+  const signIn = useSignIn()
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost:5000/login', data, {
+      const response = await axios.post('http://localhost:5000/auth/login', data, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
       if (response.status === 200) {
-        console.log('Login successful')
-        console.log(response.data)
-        navigate('/info')
-        localStorage.setItem('user', JSON.stringify(response.data))
+        console.log(data.UserID)
+        console.log(data)
+
+        signIn({
+          auth: {
+            token: 'dummy token',
+            userID: data.UserID,
+          }
+        });
+        alert('Login successful')
       }
     } catch (error) {
       console.error(error, 'Login failed')
     }
   }
+
+  const user = useAuthUser();
+  console.log(user)
 
   return (
     <div className='flex items-center justify-center min-h-screen bg-gray-100'>
@@ -31,13 +43,13 @@ function LoginPage() {
         <h2 className='text-2xl font-bold text-center text-gray-800 mb-6'>OBS Öğrenci Girişi</h2>
         <form className='space-y-9' onSubmit={handleSubmit(onSubmit)} >
           <input
-            {...register("username")}
+            {...register("UserID")}
             type='text'
             placeholder='Öğrenci No'
             className='w-full px-4 py-2 border rounded-lg border-gray-300'
           />
           <input
-            {...register("password")}
+            {...register("Password")}
             type='password'
             placeholder='Şifre'
             className='w-full px-4 py-2 border rounded-lg border-gray-300'

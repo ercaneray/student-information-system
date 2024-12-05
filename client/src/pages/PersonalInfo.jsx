@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import CustomSidebar from "../components/CustomSidebar";
-import { AuthContext } from "../context/AuthContext";
 import InfoCard from "../components/InfoCard";
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 const PersonalInfo = () => {
 
-  const user = useContext(AuthContext);
+  const user = useAuthUser();
+  console.log(user)
   return (
     <div className="flex">
       <CustomSidebar />

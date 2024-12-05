@@ -1,5 +1,6 @@
 const sql = require('mssql');
 const config = require('../config/sqlconfig.js');
+const bcrypt = require('bcrypt');
 
 
 // GET all student
@@ -40,7 +41,7 @@ const createStudent = async (req, res) => {
             .input('StudentID', sql.Int, req.body.StudentID)
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
-            .input('Password', sql.VarChar, req.body.Password)
+            .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
             .input('Agno', sql.Decimal(3, 2), req.body.Agno)
             .input('Faculty', sql.VarChar, req.body.Faculty)
             .input('Department', sql.VarChar, req.body.Department)
@@ -62,7 +63,7 @@ const updateStudent = async (req, res) => {
             .input('StudentID', sql.Int, req.body.StudentID)
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
-            .input('Password', sql.VarChar, req.body.Password)
+            .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
             .input('Agno', sql.Decimal(3, 2), req.body.Agno)
             .input('Faculty', sql.VarChar, req.body.Faculty)
             .input('Department', sql.VarChar, req.body.Department)
