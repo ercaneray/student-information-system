@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import SidebarLayout from '../layouts/SidebarLayout';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { ContextMenu } from 'primereact/contextmenu';
+import { Toast } from 'primereact/toast';
 import { useAuthStore } from '../store/authStore';
 
 function CourseList() {
@@ -13,6 +15,46 @@ function CourseList() {
 
     const [courses, setCourses] = useState([]);
     const [isError, setIsError] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+
+    const cm = useRef(null); // ContextMenu referansı
+    const toast = useRef(null); // Toast referansı
+
+    // Ders silme işlemi
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete(
+                `http://localhost:5000/courses/delete/${selectedCourse.CourseID}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    withCredentials: true,
+                }
+            );
+            if (response.status === 200) {
+                setCourses(courses.filter(course => course.CourseID !== selectedCourse.CourseID));
+                toast.current.show({
+                    severity: 'success',
+                    summary: 'Başarılı',
+                    detail: `Silinen ders: ${selectedCourse.CourseName}`,
+                });
+            } else {
+                toast.current.show({
+                    severity: 'error',
+                    summary: 'Hata',
+                    detail: 'Ders silinemedi. Lütfen tekrar deneyin.',
+                });
+            }
+        } catch (error) {
+            console.error("Silme hatası:", error);
+            toast.current.show({
+                severity: 'error',
+                summary: 'Hata',
+                detail: 'Bir hata oluştu. Ders silinemedi.',
+            });
+        }
+    };
 
     // Kullanıcı doğrulaması
     useEffect(() => {
@@ -29,7 +71,7 @@ function CourseList() {
                     },
                     withCredentials: true,
                 });
-                setCourses(response.data); // Gelen verileri state'e ata
+                setCourses(response.data);
             } catch (error) {
                 console.error("Error fetching courses:", error);
                 setIsError(true);
@@ -50,13 +92,34 @@ function CourseList() {
         );
     }
 
-    // Reusable DataTable bileşeni
-    const CustomDataTable = ({ data, columns, title }) => {
-        return (
+    // ContextMenu için menü öğeleri
+    const contextMenuItems = [
+        {
+            label: 'Düzenle',
+            icon: 'pi pi-pencil',
+            command: () => {
+                toast.current.show({
+                    severity: 'warn',
+                    summary: 'Düzenle',
+                    detail: `Düzenleme işlemi: ${selectedCourse.CourseName}`,
+                });
+            },
+        },
+        {
+            label: 'Sil',
+            icon: 'pi pi-trash',
+            command: handleDelete,
+        },
+    ];
+
+    return (
+        <SidebarLayout RoleID={user.RoleID}>
             <div className="datatable-responsive">
-                <h1 className="text-2xl font-bold mb-4">{title}</h1>
+                <Toast ref={toast} />
+                <ContextMenu model={contextMenuItems} ref={cm} />
+                <h1 className="text-2xl font-bold mb-4">Ders Listesi</h1>
                 <DataTable
-                    value={data}
+                    value={courses}
                     paginator
                     stripedRows
                     rows={7}
@@ -64,25 +127,15 @@ function CourseList() {
                     showGridlines
                     removableSort
                     resizableColumns
+                    contextMenuSelection={selectedCourse}
+                    onContextMenuSelectionChange={(e) => setSelectedCourse(e.value)}
+                    onContextMenu={(e) => cm.current.show(e.originalEvent)}
                 >
-                    {columns.map((col, index) => (
-                        <Column key={index} field={col.field} header={col.header} sortable />
-                    ))}
+                    <Column field="CourseID" header="Ders Kodu" sortable></Column>
+                    <Column field="CourseName" header="Ders Adı" sortable></Column>
+                    <Column field="Akts" header="Akts/Kredi" sortable></Column>
                 </DataTable>
             </div>
-        );
-    };
-
-    // Ders tablosu sütun bilgileri
-    const columns = [
-        { field: 'CourseID', header: 'Ders Kodu' },
-        { field: 'CourseName', header: 'Ders Adı' },
-        { field: 'Akts', header: 'Akts/Kredi' },
-    ];
-
-    return (
-        <SidebarLayout RoleID={user.RoleID}>
-            <CustomDataTable data={courses} columns={columns} title="Ders Listesi" />
         </SidebarLayout>
     );
 }
