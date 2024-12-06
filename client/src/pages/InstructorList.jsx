@@ -58,9 +58,13 @@ function InstructorList() {
                 <DataTable
                     value={data}
                     paginator
+                    stripedRows
                     rows={5}
                     rowsPerPageOptions={[5, 10, 20]}
                     className="p-datatable-md"
+                    showGridlines
+                    removableSort
+                    resizableColumns 
                 >
                     {columns.map((col, index) => (
                         <Column key={index} field={col.field} header={col.header} sortable />
