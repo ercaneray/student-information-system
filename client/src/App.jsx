@@ -6,6 +6,7 @@ import "primeicons/primeicons.css";
 import "primereact/resources/themes/saga-blue/theme.css";
 import { useAuthStore } from "./store/authStore";
 // Pages
+import Dashboard from "./pages/Dashboard";
 import PersonalInfo from "./pages/PersonalInfo";
 import LoginPage from "./pages/LoginPage";
 import Courses from "./pages/Courses";
@@ -30,13 +31,22 @@ const AuthenticatedRoute = ({ children }) => {
   }
 }
 const StudentRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-  if (isAuthenticated && user && user.RoleID === 1) {
-    return children;
-  } else {
+  const { isAuthenticated, user, isCheckingAuth } = useAuthStore();
+
+  if (isCheckingAuth) {
+    // Doğrulama devam ederken yükleme ekranı gösterebilirsiniz
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated || !user || user.RoleID !== 1) {
+    // Kullanıcı yetkili değilse yönlendirme yap
     return <PersonalInfo />;
   }
-}
+
+  // Kullanıcı yetkiliyse içeriği render et
+  return children;
+};
+
 const InstructorRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
   if (isAuthenticated && user && user.RoleID === 2) {
@@ -50,7 +60,7 @@ function App() {
   const { checkAuth, isAuthenticated, isCheckingAuth, user } = useAuthStore();
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+  }, []);
   console.log("isAuthenticated:", isAuthenticated, "isCheckingAuth:", isCheckingAuth, "user:", user);
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -65,6 +75,7 @@ function App() {
         {/* Instructor routes */}
         {/* Admin routes */}
         {/* Common routes*/}
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/" element={<ProtectedRoute><PersonalInfo /></ProtectedRoute>} />
         <Route path="/info" element={<ProtectedRoute><PersonalInfo /></ProtectedRoute>} />
         <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />

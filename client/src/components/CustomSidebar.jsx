@@ -1,57 +1,84 @@
-import React from "react";
-import { PanelMenu } from "primereact/panelmenu";
-import "primereact/resources/themes/saga-blue/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
+import React, { useState } from "react";
 import { useAuthStore } from "../store/authStore";
-import { useNavigate } from "react-router";
+import { FaUserGraduate, FaBook, FaCog } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
+import { FiMenu } from "react-icons/fi";
 
 const CustomSidebar = () => {
   const { user, logout } = useAuthStore();
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [activeRoute, setActiveRoute] = useState("/dashboard");
+
+  const handleLogout = async () => {
+    await logout();
   };
-  const navigate = useNavigate();
-  const items = [
-    { label: "Kişisel Bilgiler", icon: "pi pi-user", command: () => { navigate("/info") } },
-    {
-      label: "Öğrenim",
-      icon: "pi pi-graduation-cap",
-      items: [
-        { label: "Agno Hesapla", icon: "pi pi-calculator", command: () => { navigate("/calculator") } },
-        { label: "Ders Alma ", icon: "pi pi-book", command: () => { navigate("/courses") } },
-        { label: "Ders Alma Listesi", icon: "pi pi-book", command: () => { navigate("/course-list") } },
-      ],
-    },
-    { label: "Mesajlaşma", icon: "pi pi-envelope", command: () => { navigate("/messages") } },
-    { label: "Mezuniyet İşlemleri", icon: "pi pi-briefcase", command: () => { navigate("/graduation") } },
-    { label: "Yardım", icon: "pi pi-question-circle", command: () => window.open("https://destek.atauni.edu.tr/kb/index.php") },
-    { label: "Çıkış", icon: "pi pi-sign-out", command: () => { handleLogout() } },
+  const allMenuItems = [
+    { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard", roles: [1, 2] },
+    { name: "Özlük bilgileri", icon: <FaUserGraduate />, route: "/info", roles: [1] },
+    { name: "Ders Alma", icon: <FaBook />, route: "/courses", roles: [1, 2] },
+    { name: "Ders Alma Listesi", icon: <FaCog />, route: "/course-list", roles: [1] },
+    { name: "Agno Hesapla", icon: <FaCog />, route: "/calculator", roles: [1] },
+    { name: "Mesajlar", icon: <FaCog />, route: "/messages", roles: [1, 2] },
+    { name: "Mezuniyet İşlemleri", icon: <FaCog />, route: "/graduation", roles: [1] },
+    { name: "Çıkış", icon: <FaCog />, onclick: handleLogout() , roles: [0, 1, 2] },
   ];
+
+  const menuItems = allMenuItems.filter((item) => item.roles.includes(user.RoleID));
 
 
 
   return (
-    <div className="w-64 h-screen bg-blue-950 text-white flex flex-col fixed top-0 left-0 shadow-lg">
-      <div className="flex flex-col items-center py-6 border-b border-white/20">
-        <img
-          src="https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="
-          alt="Profile"
-          className="w-12 h-12 rounded-full mb-3"
-        />
-        <h4 className="text-lg font-semibold">{null}</h4>
-        <div className="flex gap-2 mt-2">
-          <i className="pi pi-flag text-white"></i>
-          <i className="pi pi-home text-white"></i>
-          <i className="pi pi-bell text-white"></i>
-          <i className="pi pi-info-circle text-white"></i>
-          <i className="pi pi-external-link text-white"></i>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div
+        className={`bg-white h-full border-r border-gray-200 shadow-lg transition-all duration-300 ${isCollapsed ? "w-16" : "w-64"
+          }`}
+      >
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between px-4 h-16 border-b border-gray-200">
+          <h1
+            className={`text-xl font-bold text-gray-800 transition-all ${isCollapsed ? "hidden" : "block"
+              }`}
+          >
+            StudentSys
+          </h1>
+          <FiMenu
+            className="text-2xl text-gray-800 cursor-pointer"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          />
+        </div>
+
+        {/* Sidebar Menu */}
+        <nav className="mt-4">
+          {menuItems.map((item, index) => (
+            <a
+              key={index}
+              href={item.route}
+              onClick={() => setActiveRoute(item.route)}
+              className={`flex items-center gap-4 px-4 py-3 transition-all duration-200 ${activeRoute === item.route
+                ? "bg-blue-50 border-l-4 border-blue-500 text-blue-600"
+                : "hover:bg-gray-100"
+                }`}
+            >
+              <div className="text-xl text-gray-600">{item.icon}</div>
+              <span
+                className={`text-base font-medium text-gray-800 ${isCollapsed ? "hidden" : "block"
+                  }`}
+              >
+                {item.name}
+              </span>
+            </a>
+          ))}
+        </nav>
+
+        {/* Sidebar Footer */}
+        <div className="absolute bottom-4 left-0 w-full px-4">
+          <div className="text-sm text-gray-500">
+            {isCollapsed ? "© 2024" : "© 2024 StudentSys"}
+          </div>
         </div>
       </div>
-      <div className="flex-1 p-4">
-        <PanelMenu model={items} className="w-full text-red-800 " />
-      </div>
+
     </div>
   );
 };
