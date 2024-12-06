@@ -21,6 +21,14 @@ const ProtectedRoute = ({ children }) => {
   }
   return children;
 }
+const AuthenticatedRoute = ({ children }) => {
+  const { isAuthenticated, user } = useAuthStore();
+  if (isAuthenticated && user) {
+    return <PersonalInfo />;
+  } else {
+    return children;
+  }
+}
 const StudentRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
   if (isAuthenticated && user && user.RoleID === 1) {
@@ -43,18 +51,23 @@ function App() {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-   console.log("isAuthenticated:",isAuthenticated, "isCheckingAuth:", isCheckingAuth, "user:", user);
+  console.log("isAuthenticated:", isAuthenticated, "isCheckingAuth:", isCheckingAuth, "user:", user);
   return (
     <div className="bg-gray-100 min-h-screen">
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/info" element={<PersonalInfo />} />
+        {/* Auth routes */}
+        <Route path="/login" element={<AuthenticatedRoute><LoginPage /></AuthenticatedRoute>} />
+        {/* Student routes */}
         <Route path="/calculator" element={<StudentRoute><Calculator /></StudentRoute>} />
-        <Route path="/courses" element={<InstructorRoute><Courses /></InstructorRoute>} />
-        <Route path="/course-list" element={<CourseList />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/graduation" element={<Graduation />} />
+        <Route path="/courses" element={<StudentRoute><Courses /></StudentRoute>} />
+        <Route path="/course-list" element={<StudentRoute><CourseList /></StudentRoute>} />
+        <Route path="/graduation" element={<StudentRoute><Graduation /></StudentRoute>} />
+        {/* Instructor routes */}
+        {/* Admin routes */}
+        {/* Common routes*/}
+        <Route path="/" element={<ProtectedRoute><PersonalInfo /></ProtectedRoute>} />
+        <Route path="/info" element={<ProtectedRoute><PersonalInfo /></ProtectedRoute>} />
+        <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </div>
