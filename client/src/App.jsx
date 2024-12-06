@@ -1,20 +1,25 @@
-import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primereact/resources/themes/saga-blue/theme.css";
-import { useAuthStore } from "./store/authStore";
-// Pages
-import Dashboard from "./pages/Dashboard";
-import PersonalInfo from "./pages/PersonalInfo";
+
+// Auth Pages
 import LoginPage from "./pages/LoginPage";
-import Courses from "./pages/Courses";
+// Admin Pages
+import StudentList from "./pages/StudentList";
+import InstructorList from "./pages/InstructorList";
 import CourseList from "./pages/CourseList";
+// Student & Instructor Pages
+import PersonalInfo from "./pages/PersonalInfo";
 import Messages from "./pages/Messages";
+import Dashboard from "./pages/Dashboard";
+// Student Pages
+import Courses from "./pages/Courses";
+import Mycourses from "./pages/Mycourses";
 import Graduation from "./pages/Graduation";
 import Calculator from "./pages/Calculator";
-
+// Instructor Pages
 
 
 function App() {
@@ -27,10 +32,13 @@ function App() {
         {/* Student routes */}
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/courses" element={<Courses />} />
-        <Route path="/course-list" element={<CourseList />} />
+        <Route path="/my-courses" element={<Mycourses />} />
         <Route path="/graduation" element={<Graduation />} />
         {/* Instructor routes */}
         {/* Admin routes */}
+        <Route path="/students" element={<StudentList />} />
+        <Route path="/instructors" element={<InstructorList />} />
+        <Route path="/course-list" element={<CourseList />} />
         {/* Common routes*/}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<PersonalInfo />} />

@@ -53,7 +53,7 @@ function LoginPage() {
               {...register("Password", { required: 'Şifre giriniz.' })}
               className={"w-full h-14 text-lg px-4 border-gray-300 rounded-lg"}
               onChange={(e) => setValue("Password", e.target.value)}
-              feedback={false} // Şifre gücü geri bildirimi kapalı
+              feedback="false" // Şifre gücü geri bildirimi kapalı
               type='password'
             />
             <label htmlFor="Password">Şifre</label>
