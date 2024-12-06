@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuthStore } from "../store/authStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+// Icon imports
 import { FaUserGraduate, FaBook, FaSignOutAlt } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { MdDashboard, MdCalculate } from "react-icons/md";
@@ -12,6 +13,7 @@ const CustomSidebar = () => {
   const logout = useAuthStore((state) => state.logout);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeRoute, setActiveRoute] = useState("/dashboard");
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -69,8 +71,11 @@ const CustomSidebar = () => {
               <a
                 key={index}
                 href={item.route}
-                onClick={() => setActiveRoute(item.route)}
-                className={`flex items-center gap-4 px-4 py-3 transition-all duration-200 ${activeRoute === item.route
+                onClick={(e) => {
+                  e.preventDefault(); // Sayfa yeniden yüklenmesini engeller
+                  if (item.route) navigate(item.route);
+                }}
+                className={`flex items-center gap-4 px-4 py-3 transition-all duration-200 ${location.pathname === item.route
                     ? "bg-blue-50 border-l-4 border-blue-500 text-blue-600"
                     : "hover:bg-gray-100"
                   }`}
@@ -86,7 +91,6 @@ const CustomSidebar = () => {
           )}
         </nav>
 
-
         {/* Sidebar Footer */}
         <div className="absolute bottom-4 left-0 w-full px-4">
           <div className="text-sm text-gray-500">
@@ -94,7 +98,6 @@ const CustomSidebar = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
