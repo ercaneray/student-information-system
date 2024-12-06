@@ -1,33 +1,36 @@
-import React, {useContext} from "react";
+import React from "react";
 import { PanelMenu } from "primereact/panelmenu";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router";
-import { AuthContext } from "../context/AuthContext";
 
 const CustomSidebar = () => {
-
+  const { user, logout } = useAuthStore();
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
   const navigate = useNavigate();
-  const user = useContext(AuthContext);
   const items = [
-    { label: "Kişisel Bilgiler", icon: "pi pi-user", command: () => { navigate("/info") }  },
+    { label: "Kişisel Bilgiler", icon: "pi pi-user", command: () => { navigate("/info") } },
     {
       label: "Öğrenim",
       icon: "pi pi-graduation-cap",
       items: [
-        { label: "Agno Hesapla", icon: "pi pi-calculator", command: () => { navigate("/calculator") }  },
-        { label: "Ders Alma ", icon: "pi pi-book", command: () => { navigate("/courses") }   },
-        { label: "Ders Alma Listesi", icon: "pi pi-book", command: () => { navigate("/course-list") }   },
+        { label: "Agno Hesapla", icon: "pi pi-calculator", command: () => { navigate("/calculator") } },
+        { label: "Ders Alma ", icon: "pi pi-book", command: () => { navigate("/courses") } },
+        { label: "Ders Alma Listesi", icon: "pi pi-book", command: () => { navigate("/course-list") } },
       ],
     },
-    { label: "Mesajlaşma", icon: "pi pi-envelope", command: () => { navigate("/messages") }   },
-    { label: "Mezuniyet İşlemleri", icon: "pi pi-briefcase", command: () => { navigate("/graduation") }   },
+    { label: "Mesajlaşma", icon: "pi pi-envelope", command: () => { navigate("/messages") } },
+    { label: "Mezuniyet İşlemleri", icon: "pi pi-briefcase", command: () => { navigate("/graduation") } },
     { label: "Yardım", icon: "pi pi-question-circle", command: () => window.open("https://destek.atauni.edu.tr/kb/index.php") },
-    { label: "Çıkış", icon: "pi pi-sign-out", command: () => { navigate("/login") }   },
+    { label: "Çıkış", icon: "pi pi-sign-out", command: () => { handleLogout() } },
   ];
 
-  
+
 
   return (
     <div className="w-64 h-screen bg-blue-950 text-white flex flex-col fixed top-0 left-0 shadow-lg">
@@ -37,7 +40,7 @@ const CustomSidebar = () => {
           alt="Profile"
           className="w-12 h-12 rounded-full mb-3"
         />
-        <h4 className="text-lg font-semibold">{user.FirstName +" "+ user.LastName}</h4>
+        <h4 className="text-lg font-semibold">{null}</h4>
         <div className="flex gap-2 mt-2">
           <i className="pi pi-flag text-white"></i>
           <i className="pi pi-home text-white"></i>
