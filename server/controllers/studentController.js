@@ -28,10 +28,10 @@ const getStudentByID = async (req, res) => {
             .query(`SELECT * FROM Students 
             WHERE StudentID = @StudentID`
             );
-            const sanitizedStudents = result.recordset.map(student => {
-                delete student.Password; // Şifre alanını kaldır
-                return student;
-            });
+        const sanitizedStudents = result.recordset.map(student => {
+            delete student.Password; // Şifre alanını kaldır
+            return student;
+        });
         res.status(200).json(sanitizedStudents);
     } catch (error) {
         console.error(error);

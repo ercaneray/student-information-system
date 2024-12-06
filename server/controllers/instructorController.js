@@ -46,12 +46,11 @@ const createInstructor = async (req, res) => {
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
             .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
-            .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password)
-                VALUES (@InstructorID, @FirstName, @LastName, @Password)`);
-        const sanitizedInstructors = result.recordset.map(instructor => {
-            delete instructor.Password; // Şifre alanını kaldır
-            return instructor;
-        });
+            .input('Department', sql.VarChar, req.body.Department)
+            .input('Faculty', sql.VarChar, req.body.Faculty)
+            .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password, Department, Faculty)
+                VALUES (@InstructorID, @FirstName, @LastName, @Password, @Department, @Faculty)`);
+
         res.status(201).json(result.recordset);
 
     } catch (error) {
@@ -69,11 +68,15 @@ const updateInstructor = async (req, res) => {
             .input('InstructorID', sql.Int, req.body.InstructorID)
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
+            .input('Department', sql.VarChar, req.body.Department)
+            .input('Faculty', sql.VarChar, req.body.Faculty)
             .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
             .query(`UPDATE Instructors
                 SET FirstName = @FirstName, 
                     LastName = @LastName, 
                     Password = @Password, 
+                    Department = @Department,
+                    Faculty = @Faculty
                 WHERE InstructorID = @InstructorID`
             );
         res.status(200).json(result.recordset);
