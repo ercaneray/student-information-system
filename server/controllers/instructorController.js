@@ -7,7 +7,11 @@ const getAllInstructors = async (req, res) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request().query('SELECT * FROM Instructors');
-        res.status(200).json(result.recordset);
+        const sanitizedInstructors = result.recordset.map(instructor => {
+            delete instructor.Password; // Şifre alanını kaldır
+            return instructor;
+        });
+        res.status(200).json(sanitizedInstructors);
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -22,7 +26,11 @@ const getInstructorByID = async (req, res) => {
             .query(`SELECT * FROM Instructors 
             WHERE InstructorID = @InstructorID`
             );
-        res.status(200).json(result.recordset);
+        const sanitizedInstructors = result.recordset.map(instructor => {
+            delete instructor.Password; // Şifre alanını kaldır
+            return instructor;
+        });
+        res.status(200).json(sanitizedInstructors);
     } catch (error) {
         console.error(error);
         res.status(404).send('An error occurred');
@@ -40,7 +48,12 @@ const createInstructor = async (req, res) => {
             .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
             .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password)
                 VALUES (@InstructorID, @FirstName, @LastName, @Password)`);
+        const sanitizedInstructors = result.recordset.map(instructor => {
+            delete instructor.Password; // Şifre alanını kaldır
+            return instructor;
+        });
         res.status(201).json(result.recordset);
+
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');

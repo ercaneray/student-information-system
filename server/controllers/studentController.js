@@ -8,7 +8,11 @@ const getAllStudents = async (req, res) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request().query('SELECT * FROM Students');
-        res.status(200).json(result.recordset);
+        const sanitizedStudents = result.recordset.map(student => {
+            delete student.Password; // Şifre alanını kaldır
+            return student;
+        });
+        res.status(200).json(sanitizedStudents);
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
@@ -24,9 +28,11 @@ const getStudentByID = async (req, res) => {
             .query(`SELECT * FROM Students 
             WHERE StudentID = @StudentID`
             );
-        res.status(200).json(result.recordset);
-        console.log(req.params);
-        console.log(req.body);
+            const sanitizedStudents = result.recordset.map(student => {
+                delete student.Password; // Şifre alanını kaldır
+                return student;
+            });
+        res.status(200).json(sanitizedStudents);
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred');
