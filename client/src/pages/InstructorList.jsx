@@ -59,8 +59,7 @@ function InstructorList() {
                     value={data}
                     paginator
                     stripedRows
-                    rows={5}
-                    rowsPerPageOptions={[5, 10, 20]}
+                    rows={7}
                     className="p-datatable-md"
                     showGridlines
                     removableSort
