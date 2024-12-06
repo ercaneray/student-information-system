@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
-import CustomSidebar from "../components/CustomSidebar";
+import React from "react";
+import SidebarLayout from "../layouts/SidebarLayout";
 const PersonalInfo = () => {
 
   return (
-    <div>
-        <CustomSidebar />
-        <p>Personal Info</p>
-    </div>
+    <SidebarLayout>
+      <div>
+        <h1>Özlük bilgileri</h1>
+      </div>
+    </SidebarLayout>
   );
 };
 

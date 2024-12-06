@@ -15,70 +15,27 @@ import Messages from "./pages/Messages";
 import Graduation from "./pages/Graduation";
 import Calculator from "./pages/Calculator";
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-  if (!isAuthenticated && !user) {
-    return <LoginPage />;
-  }
-  return children;
-}
-const AuthenticatedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-  if (isAuthenticated && user) {
-    return <PersonalInfo />;
-  } else {
-    return children;
-  }
-}
-const StudentRoute = ({ children }) => {
-  const { isAuthenticated, user, isCheckingAuth } = useAuthStore();
 
-  if (isCheckingAuth) {
-    // Doğrulama devam ederken yükleme ekranı gösterebilirsiniz
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated || !user || user.RoleID !== 1) {
-    // Kullanıcı yetkili değilse yönlendirme yap
-    return <PersonalInfo />;
-  }
-
-  // Kullanıcı yetkiliyse içeriği render et
-  return children;
-};
-
-const InstructorRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-  if (isAuthenticated && user && user.RoleID === 2) {
-    return children;
-  } else {
-    return <PersonalInfo />;
-  }
-}
 
 function App() {
-  const { checkAuth, isAuthenticated, isCheckingAuth, user } = useAuthStore();
-  useEffect(() => {
-    checkAuth();
-  }, []);
-  console.log("isAuthenticated:", isAuthenticated, "isCheckingAuth:", isCheckingAuth, "user:", user);
+  
   return (
     <div className="bg-gray-100 min-h-screen">
       <Routes>
         {/* Auth routes */}
-        <Route path="/login" element={<AuthenticatedRoute><LoginPage /></AuthenticatedRoute>} />
+        <Route path="/login" element={<LoginPage />} />
         {/* Student routes */}
-        <Route path="/calculator" element={<StudentRoute><Calculator /></StudentRoute>} />
-        <Route path="/courses" element={<StudentRoute><Courses /></StudentRoute>} />
-        <Route path="/course-list" element={<StudentRoute><CourseList /></StudentRoute>} />
-        <Route path="/graduation" element={<StudentRoute><Graduation /></StudentRoute>} />
+        <Route path="/calculator" element={<Calculator />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/course-list" element={<CourseList />} />
+        <Route path="/graduation" element={<Graduation />} />
         {/* Instructor routes */}
         {/* Admin routes */}
         {/* Common routes*/}
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/" element={<ProtectedRoute><PersonalInfo /></ProtectedRoute>} />
-        <Route path="/info" element={<ProtectedRoute><PersonalInfo /></ProtectedRoute>} />
-        <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<PersonalInfo />} />
+        <Route path="/info" element={<PersonalInfo />} />
+        <Route path="/messages" element={<Messages />} />
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </div>
