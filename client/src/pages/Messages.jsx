@@ -1,14 +1,47 @@
-import React from "react";
-import SidebarLayout from "../layouts/SidebarLayout";
-const Messages = () => {
+import React, { useEffect, useState } from 'react';
+import SidebarLayout from '../layouts/SidebarLayout';
+import { useAuthStore } from '../store/authStore';
+import MessageList from '../components/MessageList';
 
-  return (
-    <SidebarLayout>
-      <div>
-        <h1>Mesajlar</h1>
-      </div>
-    </SidebarLayout>
-  );
-};
+function Messages() {
+    const user = useAuthStore((state) => state.user);
+    const checkAuth = useAuthStore((state) => state.checkAuth);
+    const isLoading = useAuthStore((state) => state.isLoading);
+    const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
-export default Messages
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        checkAuth();
+    }, [checkAuth]);
+
+    // API'den mesajları al
+    useEffect(() => {
+        {
+            fetch('http://localhost:5000/messages/getMyMessages/190005') // Backend endpoint
+                .then((response) => response.json())
+                .then((data) => {
+                    setMessages(data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching messages:', error);
+                });
+                
+        }
+    }, [user?.UserID]);
+
+    if (isCheckingAuth || isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <SidebarLayout RoleID={user.RoleID}>
+            <div>
+                <h1>Messages</h1>
+                <MessageList messages={messages} />
+            </div>
+        </SidebarLayout>
+    );
+}
+
+export default Messages;

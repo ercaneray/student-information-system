@@ -34,14 +34,13 @@ const deleteMessage = async (req, res) => {
     }
 }
 
-
-
+// GET user's messages
 const getMyMessages = async (req, res) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('UserID', sql.Int, req.params.id)
-            .execute('sp_getMyMessages')
+            .execute('sp_GetMyMessages')
         if (!result.recordset)
             return res.status(404).send('No messages found');
         else

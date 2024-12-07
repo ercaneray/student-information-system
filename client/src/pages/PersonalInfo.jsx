@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import SidebarLayout from "../layouts/SidebarLayout";
 import { useAuthStore } from "../store/authStore";
+
 const PersonalInfo = () => {
   const user = useAuthStore((state) => state.user);
   const checkAuth = useAuthStore((state) => state.checkAuth);
