@@ -12,7 +12,7 @@ const getMessageByID = async (req, res) => {
             return res.status(404).send('Message not found');
         else
             console.log(result.recordset);
-            return res.status(200).json(result.recordset[0]);
+        return res.status(200).json(result.recordset[0]);
     } catch (error) {
         console.error(error);
     }
@@ -25,7 +25,7 @@ const deleteMessage = async (req, res) => {
         let result = await pool.request()
             .input('MessageID', sql.Int, req.params.id)
             .query(`DELETE FROM Messages WHERE MessageID = @MessageID`);
-        if (!result.recordset)
+        if (result.rowsAffected[0] === 0)
             return res.status(404).send('Message not found');
         else
             return res.status(200).send('Message deleted');
@@ -35,12 +35,12 @@ const deleteMessage = async (req, res) => {
 }
 
 // GET user's messages
-const getMyMessages = async (req, res) => {
+const getUserMessages = async (req, res) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('UserID', sql.Int, req.params.id)
-            .execute('sp_GetMyMessages')
+            .execute('sp_GetUserMessages')
         if (!result.recordset)
             return res.status(404).send('No messages found');
         else
@@ -50,8 +50,35 @@ const getMyMessages = async (req, res) => {
     }
 }
 
+const createMessage = async (req, res) => {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('SenderID', sql.Int, req.body.SenderID)
+            .input('ReceiverID', sql.Int, req.body.ReceiverID)
+            .input('Message', sql.NVarChar, req.body.Message)
+            .query(`
+                INSERT INTO Messages (SenderID, ReceiverID, Message) 
+                OUTPUT INSERTED.MessageID, INSERTED.SenderID, INSERTED.ReceiverID, INSERTED.Message, INSERTED.Date
+                VALUES (@SenderID, @ReceiverID, @Message)
+            `);
+
+        if (result.recordset.length === 0) {
+            return res.status(400).send('Message not created');
+        }
+
+        // Yeni mesajın detaylarını döndür
+        return res.status(201).json(result.recordset[0]);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Internal server error');
+    }
+};
+
+
 module.exports = {
     getMessageByID,
-    getMyMessages,
-    deleteMessage
+    getUserMessages,
+    deleteMessage,
+    createMessage
 };

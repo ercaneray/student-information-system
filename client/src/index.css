@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-container {
-  @apply mx-auto;
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Dış kaydırma çubuğunu kaldırır */
+  height: 100%;
 }
+
+#root {
+  height: 100%;
+}
+
         

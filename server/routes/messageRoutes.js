@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getMessageByID, getMyMessages, deleteMessage } = require('../controllers/messageController');
+const { getMessageByID, getUserMessages, deleteMessage, createMessage } = require('../controllers/messageController');
 
 // GET message by ID
 router.get('/get/:id', getMessageByID);
@@ -9,6 +9,9 @@ router.get('/get/:id', getMessageByID);
 router.delete('/delete/:id', deleteMessage);
 
 // GET my messages
-router.get('/getMyMessages/:id', getMyMessages);
+router.get('/getUserMessages/:id', getUserMessages);
+
+// POST create message
+router.post('/create', createMessage);
 
 module.exports = router;
