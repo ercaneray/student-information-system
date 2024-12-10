@@ -5,13 +5,13 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useAuthStore } from '../store/authStore';
 
-function MyCourses() {
+function Grades() {
   const user = useAuthStore((state) => state.user);
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const isLoading = useAuthStore((state) => state.isLoading);
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
-  const [courses, setCourses] = useState([]);
+  const [grades, setGrades] = useState([]);
 
 
   useEffect(() => {
@@ -19,7 +19,7 @@ function MyCourses() {
   }, [checkAuth]);
   // Ders listesini API'den çek
   useEffect(() => {
-    const getCourses = async () => {
+    const getGrades = async () => {
       if (!user) {
         return;
       }
@@ -30,12 +30,12 @@ function MyCourses() {
           },
           withCredentials: true,
         });
-        setCourses(response.data);
+        setGrades(response.data);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
-    getCourses();
+    getGrades();
   }, [user]);
 
   if (isCheckingAuth || isLoading) {
@@ -46,9 +46,9 @@ function MyCourses() {
   return (
     <SidebarLayout RoleID={user.RoleID}>
       <div className="datatable-responsive">
-        <h1 className="text-2xl font-bold mb-4">Derslerim</h1>
+        <h1 className="text-2xl font-bold mb-4">Sınavlarım</h1>
         <DataTable
-          value={courses}
+          value={grades}
           paginator
           stripedRows
           rows={7}
@@ -66,4 +66,4 @@ function MyCourses() {
   );
 }
 
-export default MyCourses;
+export default Grades;

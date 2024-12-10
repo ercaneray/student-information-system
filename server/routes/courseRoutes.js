@@ -4,7 +4,8 @@ const {
     getCourseByID,
     createCourse,
     updateCourse,
-    deleteCourse
+    deleteCourse,
+    getStudentCourses
 } = require('../controllers/courseController');
 const router = express.Router();
 
@@ -13,6 +14,9 @@ router.get('/get', getAllCourses);
 
 // GET course by ID
 router.get('/get/:id', getCourseByID);
+
+// GET Students courses by studentID
+router.get('/get/student/:id', getStudentCourses);
 
 // POST create course
 router.post('/create', createCourse);

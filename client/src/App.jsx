@@ -16,14 +16,17 @@ import Messages from "./pages/Messages";
 import Dashboard from "./pages/Dashboard";
 // Student Pages
 import Courses from "./pages/Courses";
-import Mycourses from "./pages/Mycourses";
+import Mycourses from "./pages/MyCourses";
 import Graduation from "./pages/Graduation";
 import Calculator from "./pages/Calculator";
+import Grades from "./pages/Grades";
 // Instructor Pages
+// Advisor Pages
+import ApproveCourse from "./pages/ApproveCourse";
 
 
 function App() {
-  
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Routes>
@@ -34,7 +37,10 @@ function App() {
         <Route path="/courses" element={<Courses />} />
         <Route path="/my-courses" element={<Mycourses />} />
         <Route path="/graduation" element={<Graduation />} />
+        <Route path="/grades" element={<Grades />} />
         {/* Instructor routes */}
+        {/* Advisor routes */}
+        <Route path="/approve-course" element={<ApproveCourse />} />
         {/* Admin routes */}
         <Route path="/students" element={<StudentList />} />
         <Route path="/instructors" element={<InstructorList />} />

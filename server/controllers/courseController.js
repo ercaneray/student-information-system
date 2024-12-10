@@ -28,8 +28,6 @@ const getCourseByID = async (req, res) => {
     }
 }
 
-
-
 // Create Course
 const createCourse = async (req, res) => {
     try {
@@ -46,7 +44,6 @@ const createCourse = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-
 
 // Update Course
 const updateCourse = async (req, res) => {
@@ -82,11 +79,31 @@ const deleteCourse = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
+// Get  a student's courses by studentID
+const getStudentCourses = async (req, res) => {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('StudentID', sql.Int, req.params.id)
+            .query(`SELECT * FROM Courses 
+            WHERE CourseID IN (
+                SELECT CourseID FROM StudentCourse
+                WHERE StudentID = @StudentID
+            )`
+            );
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        console.error(error);
+        res.status(404).send('An error occurred');
+    }
+
+}
 
 module.exports = {
     getAllCourses,
     getCourseByID,
     createCourse,
     updateCourse,
-    deleteCourse
+    deleteCourse,
+    getStudentCourses
 }
