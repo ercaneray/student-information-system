@@ -7,22 +7,22 @@ import "primereact/resources/themes/saga-blue/theme.css";
 // Auth Pages
 import LoginPage from "./pages/LoginPage";
 // Admin Pages
-import StudentList from "./pages/StudentList";
-import InstructorList from "./pages/InstructorList";
-import CourseList from "./pages/CourseList";
+import StudentList from "./pages/admin/StudentList";
+import InstructorList from "./pages/admin/InstructorList";
+import CourseList from "./pages/admin/CourseList";
 // Student & Instructor Pages
 import PersonalInfo from "./pages/PersonalInfo";
 import Messages from "./pages/Messages";
 import Dashboard from "./pages/Dashboard";
 // Student Pages
-import Courses from "./pages/Courses";
-import Mycourses from "./pages/MyCourses";
-import Graduation from "./pages/Graduation";
-import Calculator from "./pages/Calculator";
-import Grades from "./pages/Grades";
+import Courses from "./pages/student/Courses";
+import Mycourses from "./pages/student/MyCourses";
+import Graduation from "./pages/student/Graduation";
+import Calculator from "./pages/student/Calculator";
+import Grades from "./pages/student/Grades";
 // Instructor Pages
 // Advisor Pages
-import ApproveCourse from "./pages/ApproveCourse";
+import ApproveCourse from "./pages/advisor/ApproveCourse";
 
 
 function App() {

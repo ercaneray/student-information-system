@@ -1,30 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import SidebarLayout from '../layouts/SidebarLayout';
+import SidebarLayout from '../../layouts/SidebarLayout';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { ContextMenu } from 'primereact/contextmenu';
 import { Toast } from 'primereact/toast';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 
-function InstructorList() {
+function CourseList() {
     const user = useAuthStore((state) => state.user);
     const checkAuth = useAuthStore((state) => state.checkAuth);
     const isLoading = useAuthStore((state) => state.isLoading);
     const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
-    const [instructors, setInstructors] = useState([]);
+    const [courses, setCourses] = useState([]);
     const [isError, setIsError] = useState(false);
-    const [selectedInstructor, setSelectedInstructor] = useState(null);
+    const [selectedCourse, setSelectedCourse] = useState(null);
 
     const cm = useRef(null); // ContextMenu referansı
     const toast = useRef(null); // Toast referansı
 
-    // Eğitmen silme işlemi
+    // Ders silme işlemi
     const handleDelete = async () => {
         try {
             const response = await axios.delete(
-                `http://localhost:5000/instructors/delete/${selectedInstructor.InstructorID}`,
+                `http://localhost:5000/courses/delete/${selectedCourse.CourseID}`,
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -32,23 +32,18 @@ function InstructorList() {
                     withCredentials: true,
                 }
             );
-
             if (response.status === 200) {
-                setInstructors(
-                    instructors.filter(
-                        instructor => instructor.InstructorID !== selectedInstructor.InstructorID
-                    )
-                );
+                setCourses(courses.filter(course => course.CourseID !== selectedCourse.CourseID));
                 toast.current.show({
                     severity: 'success',
                     summary: 'Başarılı',
-                    detail: `Silinen eğitmen: ${selectedInstructor.FirstName}`,
+                    detail: `Silinen ders: ${selectedCourse.CourseName}`,
                 });
             } else {
                 toast.current.show({
                     severity: 'error',
                     summary: 'Hata',
-                    detail: 'Eğitmen silinemedi. Lütfen tekrar deneyin.',
+                    detail: 'Ders silinemedi. Lütfen tekrar deneyin.',
                 });
             }
         } catch (error) {
@@ -56,7 +51,7 @@ function InstructorList() {
             toast.current.show({
                 severity: 'error',
                 summary: 'Hata',
-                detail: 'Bir hata oluştu. Eğitmen silinemedi.',
+                detail: 'Bir hata oluştu. Ders silinemedi.',
             });
         }
     };
@@ -66,23 +61,23 @@ function InstructorList() {
         checkAuth();
     }, [checkAuth]);
 
-    // Eğitmen verilerini çek
+    // Ders listesini API'den çek
     useEffect(() => {
-        const getInstructors = async () => {
+        const getCourses = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/instructors/get", {
+                const response = await axios.get("http://localhost:5000/courses/get", {
                     headers: {
                         "Content-Type": "application/json",
                     },
                     withCredentials: true,
                 });
-                setInstructors(response.data);
+                setCourses(response.data);
             } catch (error) {
-                console.error("Error fetching instructors:", error);
+                console.error("Error fetching courses:", error);
                 setIsError(true);
             }
         };
-        getInstructors();
+        getCourses();
     }, []);
 
     if (isCheckingAuth || isLoading) {
@@ -92,7 +87,7 @@ function InstructorList() {
     if (isError) {
         return (
             <SidebarLayout RoleID={user.RoleID}>
-                <div>Eğitmen bilgileri yüklenirken bir hata oluştu.</div>
+                <div>Ders bilgileri yüklenirken bir hata oluştu.</div>
             </SidebarLayout>
         );
     }
@@ -106,7 +101,7 @@ function InstructorList() {
                 toast.current.show({
                     severity: 'warn',
                     summary: 'Düzenle',
-                    detail: `Düzenleme işlemi: ${selectedInstructor.FirstName}`,
+                    detail: `Düzenleme işlemi: ${selectedCourse.CourseName}`,
                 });
             },
         },
@@ -122,9 +117,9 @@ function InstructorList() {
             <div className="datatable-responsive">
                 <Toast ref={toast} />
                 <ContextMenu model={contextMenuItems} ref={cm} />
-                <h1 className="text-2xl font-bold mb-4">Eğitmen Listesi</h1>
+                <h1 className="text-2xl font-bold mb-4">Ders Listesi</h1>
                 <DataTable
-                    value={instructors}
+                    value={courses}
                     paginator
                     stripedRows
                     rows={7}
@@ -132,18 +127,17 @@ function InstructorList() {
                     showGridlines
                     removableSort
                     resizableColumns
-                    contextMenuSelection={selectedInstructor}
-                    onContextMenuSelectionChange={(e) => setSelectedInstructor(e.value)}
+                    contextMenuSelection={selectedCourse}
+                    onContextMenuSelectionChange={(e) => setSelectedCourse(e.value)}
                     onContextMenu={(e) => cm.current.show(e.originalEvent)}
                 >
-                    <Column field="InstructorID" header="ID" sortable></Column>
-                    <Column field="FirstName" header="Adı" sortable></Column>
-                    <Column field="LastName" header="Soyadı" sortable></Column>
-                    <Column field="Department" header="Bölüm" sortable></Column>
+                    <Column field="CourseID" header="Ders Kodu" sortable></Column>
+                    <Column field="CourseName" header="Ders Adı" sortable></Column>
+                    <Column field="Akts" header="Akts/Kredi" sortable></Column>
                 </DataTable>
             </div>
         </SidebarLayout>
     );
 }
 
-export default InstructorList;
+export default CourseList;

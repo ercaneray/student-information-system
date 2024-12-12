@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import SidebarLayout from '../layouts/SidebarLayout';
+import SidebarLayout from '../../layouts/SidebarLayout';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 
 function Grades() {
   const user = useAuthStore((state) => state.user);

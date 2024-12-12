@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import SidebarLayout from '../layouts/SidebarLayout';
+import SidebarLayout from '../../layouts/SidebarLayout';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { ContextMenu } from 'primereact/contextmenu';
 import { Toast } from 'primereact/toast';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 
 function StudentList() {
     const user = useAuthStore((state) => state.user);
