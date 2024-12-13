@@ -6,7 +6,13 @@ const bcrypt = require('bcrypt');
 const getAllInstructors = async (req, res) => {
     try {
         let pool = await sql.connect(config);
-        let result = await pool.request().query('SELECT * FROM Instructors');
+        let result = await pool.request().query(`SELECT [InstructorID]
+      ,[FirstName]
+      ,[LastName]
+      ,[Password]
+      ,[RoleID]
+      ,D.DepartmentName FROM Instructors I
+        JOIN Departments D ON I.DepartmentID = D.DepartmentID`);
         const sanitizedInstructors = result.recordset.map(instructor => {
             delete instructor.Password; // Şifre alanını kaldır
             return instructor;

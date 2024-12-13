@@ -123,7 +123,7 @@ function CourseList() {
                     paginator
                     stripedRows
                     rows={7}
-                    className="p-datatable-md"
+                    className="p-datatable-md shadow-md"
                     showGridlines
                     removableSort
                     resizableColumns

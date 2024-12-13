@@ -12,14 +12,7 @@ const login = async (req, res) => {
         if (!result.recordset)
             return res.status(404).send('User not found');
         else {
-            let isPasswordValid;
-            if (result.recordset[0].RoleID === 0) {
-                isPasswordValid = req.body.Password === result.recordset[0].Password;
-            }
-            else {
-                isPasswordValid = await bcrypt.compare(req.body.Password, result.recordset[0].Password);
-            }
-            if (isPasswordValid) {
+            if (req.body.Password === result.recordset[0].Password) {
                 generateJWTToken(res, result.recordset[0]);
                 return res.status(200).json(result.recordset[0]);
             }
@@ -49,6 +42,7 @@ const checkAuth = async (req, res) => {
         else
             return res.status(404).send('User not found');
     } catch (error) {
+        res.status(500).send('Internal server error');
         console.error(error);
     }
 }

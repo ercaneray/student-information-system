@@ -5,14 +5,15 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useAuthStore } from '../../store/authStore';
 
-function MyCourses() {
+function RequestCourses() {
   const user = useAuthStore((state) => state.user);
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const isLoading = useAuthStore((state) => state.isLoading);
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
   const [courses, setCourses] = useState([]);
-  const currentCourses = courses.filter((course) => course.Semester === 0);
+  const Courses0 = courses.filter((course) => course.Semester === 0);
+  const Courses1 = courses.filter((course) => course.Semester === 1);
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -45,10 +46,24 @@ function MyCourses() {
   return (
     <SidebarLayout RoleID={user.RoleID}>
       <div className="datatable-responsive">
-        <h1 className="text-2xl font-bold mb-4">Derslerim</h1>
-        <div >
+        <h1 className="text-2xl font-bold mb-4">Ders alma listesi</h1>
+        <div className='flex space-x-20 '>
           <DataTable
-            value={currentCourses}
+            value={Courses0}
+            paginator
+            stripedRows
+            rows={7}
+            className="p-datatable-lg"
+            showGridlines
+            removableSort
+            resizableColumns
+          >
+            <Column field="CourseID" header="Ders Kodu" sortable></Column>
+            <Column field="CourseName" header="Ders Adı" sortable></Column>
+            <Column field="Akts" header="Akts/Kredi" sortable></Column>
+          </DataTable>
+          <DataTable
+            value={Courses1}
             paginator
             stripedRows
             rows={7}
@@ -68,4 +83,4 @@ function MyCourses() {
   );
 }
 
-export default MyCourses;
+export default RequestCourses;

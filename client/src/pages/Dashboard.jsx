@@ -9,7 +9,6 @@ function Dashboard() {
     useEffect(() => {
         checkAuth();
     }, [checkAuth]);
-
     if (isCheckingAuth || isLoading) {
         return <div>Loading...</div>;
     }

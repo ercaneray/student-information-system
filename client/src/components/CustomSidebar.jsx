@@ -31,7 +31,7 @@ const CustomSidebar = ({ RoleID }) => {
     1: [
       { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
       { name: "Özlük bilgileri", icon: <FaUserGraduate />, route: "/info" },
-      { name: "Ders Alma", icon: <FaBook />, route: "/courses" },
+      { name: "Ders Alma", icon: <FaBook />, route: "/request-courses" },
       { name: "Derslerim", icon: <HiOutlineClipboardList />, route: "/my-courses" },
       { name: "Agno Hesapla", icon: <MdCalculate />, route: "/calculator" },
       { name: "Sınavlar", icon: <HiOutlineClipboardList />, route: "/grades" },
@@ -41,14 +41,12 @@ const CustomSidebar = ({ RoleID }) => {
     ],
     2: [
       { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
-      { name: "Özlük bilgileri", icon: <FaUserGraduate />, route: "/info" },
       { name: "Sınav Notu Ekle", icon: <HiOutlineClipboardList />, route: "/course-list" },
       { name: "Mesajlar", icon: <AiFillMessage />, route: "/messages" },
       { name: "Çıkış", icon: <FaSignOutAlt />, onclick: handleLogout },
     ],
     3:[
       { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
-      { name: "Özlük bilgileri", icon: <FaUserGraduate />, route: "/info" },
       { name: "Ders Onayla", icon: <FaBook />, route: "/approve-course" },
       { name: "Sınav Notu Ekle", icon: <HiOutlineClipboardList />, route: "/course-list" },
       { name: "Mesajlar", icon: <AiFillMessage />, route: "/messages" },

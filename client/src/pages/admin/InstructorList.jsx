@@ -128,7 +128,7 @@ function InstructorList() {
                     paginator
                     stripedRows
                     rows={7}
-                    className="p-datatable-md"
+                    className="p-datatable-md shadow-md"
                     showGridlines
                     removableSort
                     resizableColumns
@@ -139,7 +139,7 @@ function InstructorList() {
                     <Column field="InstructorID" header="ID" sortable></Column>
                     <Column field="FirstName" header="Adı" sortable></Column>
                     <Column field="LastName" header="Soyadı" sortable></Column>
-                    <Column field="Department" header="Bölüm" sortable></Column>
+                    <Column field="DepartmentName" header="Bölüm" sortable></Column>
                 </DataTable>
             </div>
         </SidebarLayout>

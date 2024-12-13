@@ -15,7 +15,7 @@ import PersonalInfo from "./pages/PersonalInfo";
 import Messages from "./pages/Messages";
 import Dashboard from "./pages/Dashboard";
 // Student Pages
-import Courses from "./pages/student/Courses";
+import RequestCourses from "./pages/student/RequestCourses";
 import Mycourses from "./pages/student/MyCourses";
 import Graduation from "./pages/student/Graduation";
 import Calculator from "./pages/student/Calculator";
@@ -34,7 +34,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         {/* Student routes */}
         <Route path="/calculator" element={<Calculator />} />
-        <Route path="/courses" element={<Courses />} />
+        <Route path="/request-courses" element={<RequestCourses />} />
         <Route path="/my-courses" element={<Mycourses />} />
         <Route path="/graduation" element={<Graduation />} />
         <Route path="/grades" element={<Grades />} />

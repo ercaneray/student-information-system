@@ -5,7 +5,14 @@ const config = require('../config/sqlconfig.js');
 const getAllCourses = async (req, res) => {
     try {
         let pool = await sql.connect(config);
-        let result = await pool.request().query('SELECT * FROM Courses');
+        let result = await pool.request().query(`SELECT [CourseID]
+      ,[CourseName]
+      ,[Akts]
+      ,[Semester]
+      ,[Class]
+      ,[RequiredCourseID]
+	  ,D.DepartmentName
+FROM Courses C LEFT JOIN Departments D ON C.DepartmentID = D.DepartmentID`);
         res.status(200).json(result.recordset);
     } catch (error) {
         console.error(error);
@@ -98,6 +105,7 @@ const getStudentCourses = async (req, res) => {
     }
 
 }
+// Get a student's requestable courses by DepartmentID
 
 module.exports = {
     getAllCourses,

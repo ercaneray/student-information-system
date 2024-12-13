@@ -23,8 +23,7 @@ const PersonalInfo = () => {
         <div className="space-y-4 text-gray-700">
           <p><span className="font-semibold">Ad Soyad:</span> {user.FirstName + " " + user.LastName} </p>
           <p><span className="font-semibold">Öğrenci Numarası:</span> {user.UserID} </p>
-          <p><span className="font-semibold">Fakülte:</span> {user.Faculty} </p>
-          <p><span className="font-semibold">Bölüm:</span> {user.Department} </p>
+          <p><span className="font-semibold">Bölüm:</span> {user.DepartmentName} </p>
           <p><span className="font-semibold">Sınıf:</span> {user.Class} </p>
           <p><span className="font-semibold">Agno:</span> {user.Agno} </p>
         </div>
