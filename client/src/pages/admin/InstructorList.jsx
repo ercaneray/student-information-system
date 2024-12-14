@@ -135,11 +135,14 @@ function InstructorList() {
                     contextMenuSelection={selectedInstructor}
                     onContextMenuSelectionChange={(e) => setSelectedInstructor(e.value)}
                     onContextMenu={(e) => cm.current.show(e.originalEvent)}
+                    rowHover={true}
+
                 >
                     <Column field="InstructorID" header="ID" sortable></Column>
                     <Column field="FirstName" header="Adı" sortable></Column>
                     <Column field="LastName" header="Soyadı" sortable></Column>
                     <Column field="DepartmentName" header="Bölüm" sortable></Column>
+                    <Column field="RoleName" header="Rol" sortable></Column>
                 </DataTable>
             </div>
         </SidebarLayout>

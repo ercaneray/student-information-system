@@ -130,6 +130,7 @@ function StudentList() {
                     contextMenuSelection={selectedStudent}
                     onContextMenuSelectionChange={(e) => setSelectedStudent(e.value)}
                     onContextMenu={(e) => cm.current.show(e.originalEvent)}
+                    rowHover={true}
                 >
                     <Column field="StudentID" header="ID" sortable></Column>
                     <Column field="FirstName" header="Adı" sortable></Column>

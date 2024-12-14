@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate, useLocation } from "react-router-dom";
 // Icon imports
-import { FaUserGraduate, FaBook, FaSignOutAlt } from "react-icons/fa";
+import { FaUserGraduate, FaBook, FaSignOutAlt, FaHome, FaChalkboardTeacher } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { MdDashboard, MdCalculate } from "react-icons/md";
 import { AiFillMessage } from "react-icons/ai";
@@ -22,11 +22,11 @@ const CustomSidebar = ({ RoleID }) => {
 
   const menuItemsByRole = {
     0: [
-      { name: "Dashboard", route: "/dashboard" },
-      { name: "Öğrenci Listesi", route: "/students" },
-      { name: "Eğitmen Listesi", route: "/instructors" },
-      { name: "Ders Listesi", route: "/course-list" },
-      { name: "Çıkış", onclick: handleLogout },
+      { name: "Dashboard", route: "/dashboard", icon: <FaHome />, },
+      { name: "Öğrenci Listesi", route: "/students", icon: <FaUserGraduate />, },
+      { name: "Eğitmen Listesi", route: "/instructors", icon: <FaChalkboardTeacher />, },
+      { name: "Ders Listesi", route: "/course-list", icon: <FaBook />, },
+      { name: "Çıkış", onclick: handleLogout, icon: <FaSignOutAlt />, },
     ],
     1: [
       { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
@@ -45,7 +45,7 @@ const CustomSidebar = ({ RoleID }) => {
       { name: "Mesajlar", icon: <AiFillMessage />, route: "/messages" },
       { name: "Çıkış", icon: <FaSignOutAlt />, onclick: handleLogout },
     ],
-    3:[
+    3: [
       { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
       { name: "Ders Onayla", icon: <FaBook />, route: "/course-requests" },
       { name: "Sınav Notu Ekle", icon: <HiOutlineClipboardList />, route: "/course-list" },

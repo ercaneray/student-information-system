@@ -10,9 +10,11 @@ const getAllInstructors = async (req, res) => {
       ,[FirstName]
       ,[LastName]
       ,[Password]
-      ,[RoleID]
+      ,I.RoleID
+      ,R.RoleName
       ,D.DepartmentName FROM Instructors I
-        JOIN Departments D ON I.DepartmentID = D.DepartmentID`);
+        JOIN Departments D ON I.DepartmentID = D.DepartmentID
+        JOIN Roles R ON I.RoleID = R.RoleID`);
         const sanitizedInstructors = result.recordset.map(instructor => {
             delete instructor.Password; // Şifre alanını kaldır
             return instructor;

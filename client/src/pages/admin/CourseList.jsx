@@ -111,7 +111,6 @@ function CourseList() {
             command: handleDelete,
         },
     ];
-
     return (
         <SidebarLayout RoleID={user.RoleID}>
             <div className="datatable-responsive">
@@ -133,6 +132,8 @@ function CourseList() {
                 >
                     <Column field="CourseID" header="Ders Kodu" sortable></Column>
                     <Column field="CourseName" header="Ders Adı" sortable></Column>
+                    <Column field="Semester" header="Dönem" body={(rowData) => (rowData.Semester ? "Bahar" : "Güz")} sortable></Column>
+                    <Column field="Class" header="Sınıf" sortable></Column>
                     <Column field="Akts" header="Akts/Kredi" sortable></Column>
                 </DataTable>
             </div>
