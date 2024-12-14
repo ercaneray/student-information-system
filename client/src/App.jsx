@@ -22,7 +22,7 @@ import Calculator from "./pages/student/Calculator";
 import Grades from "./pages/student/Grades";
 // Instructor Pages
 // Advisor Pages
-import ApproveCourse from "./pages/advisor/ApproveCourse";
+import CourseRequests from "./pages/advisor/CourseRequests";
 
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
         <Route path="/grades" element={<Grades />} />
         {/* Instructor routes */}
         {/* Advisor routes */}
-        <Route path="/approve-course" element={<ApproveCourse />} />
+        <Route path="/course-requests" element={<CourseRequests />} />
         {/* Admin routes */}
         <Route path="/students" element={<StudentList />} />
         <Route path="/instructors" element={<InstructorList />} />

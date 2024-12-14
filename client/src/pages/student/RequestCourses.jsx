@@ -4,6 +4,7 @@ import SidebarLayout from '../../layouts/SidebarLayout';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useAuthStore } from '../../store/authStore';
+import { Button } from 'primereact/button';
 
 function RequestCourses() {
   const user = useAuthStore((state) => state.user);
@@ -12,19 +13,23 @@ function RequestCourses() {
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
   const [courses, setCourses] = useState([]);
-  const Courses0 = courses.filter((course) => course.Semester === 0);
-  const Courses1 = courses.filter((course) => course.Semester === 1);
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const Semester0 = courses.filter((course) => (course.Semester === 0) && (course.Class <= user.Class));
+  const Semester1 = courses.filter((course) => (course.Semester === 1) && (course.Class <= user.Class));
+  const Semester = false;
+  const AktsCredit = 20;
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-  // Ders listesini API'den çek
+
   useEffect(() => {
     const getCourses = async () => {
       if (!user) {
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:5000/courses/get/student/${user.UserID}`, {
+        const response = await axios.get(`http://localhost:5000/courses/get/department/${user.DepartmentID}`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -38,18 +43,80 @@ function RequestCourses() {
     getCourses();
   }, [user]);
 
+  const handleSubmit = async () => {
+    if (selectedCourses.length === 0) {
+      console.log("Lütfen en az bir kurs seçin");
+      return;
+    }
+    console.log(selectedCourses)
+    if (selectedCourses.reduce((acc, course) => acc + course.Akts, 0) > AktsCredit) {
+      console.log("Seçilen kurslar AKTS kredisini aşmaktadır.");
+      return;
+    }
+    try {
+      const response = await axios.get(`http://localhost:5000/courses/check-request/${user.UserID}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      console.log("Check request response:", response);
+      const response2 = await axios.get(`http://localhost:5000/courses/get/student/${user.UserID}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      if (response.status === 201) {
+        console.log("Bu dönem için ders seçim isteğiniz gönderilmiş ve beklemede.");
+        return;
+      } else if (response2.data.length > 0) {
+        console.log("Bu dönem için ders seçim isteğiniz gönderilmiş ve tamamlanmıştır.");
+        return;
+      } else {
+        try {
+          // Seçilen kurslar için gerekli bilgileri içeren istekleri oluştur
+          const promises = selectedCourses.map((course) => {
+            return axios.put(
+              `http://localhost:5000/courses/request-approval`,
+              {
+                CourseID: course.CourseID,
+                StudentID: user.UserID, // Auth Store'dan gelen öğrenci ID'si
+                DepartmentID: user.DepartmentID, // Auth Store'dan gelen departman ID'si
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                withCredentials: true,
+              }
+            );
+          });
+          // Tüm isteklerin tamamlanmasını bekle
+          const responses = await Promise.all(promises);
+          console.log("Kurslar başarıyla gönderildi:", responses);
+        } catch (error) {
+          console.error("Kurs gönderme işlemi sırasında hata oluştu:", error);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
+
+
   if (isCheckingAuth || isLoading) {
     return <div>Loading...</div>;
   }
 
-
   return (
     <SidebarLayout RoleID={user.RoleID}>
       <div className="datatable-responsive">
-        <h1 className="text-2xl font-bold mb-4">Ders alma listesi</h1>
-        <div className='flex space-x-20 '>
+        <h1 className="text-2xl font-bold mb-4">Ders alma listesi | AKTS Limitiniz : 20</h1>
+        <div className='flex space-x-20'>
           <DataTable
-            value={Courses0}
+            value={Semester0}
             paginator
             stripedRows
             rows={7}
@@ -57,13 +124,17 @@ function RequestCourses() {
             showGridlines
             removableSort
             resizableColumns
+            selectionMode={!Semester ? "multiple" : null}
+            selection={!Semester ? selectedCourses : null}
+            onSelectionChange={(e) => setSelectedCourses(e.value)}
           >
+            {!Semester && <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>}
             <Column field="CourseID" header="Ders Kodu" sortable></Column>
             <Column field="CourseName" header="Ders Adı" sortable></Column>
             <Column field="Akts" header="Akts/Kredi" sortable></Column>
           </DataTable>
           <DataTable
-            value={Courses1}
+            value={Semester1}
             paginator
             stripedRows
             rows={7}
@@ -71,14 +142,18 @@ function RequestCourses() {
             showGridlines
             removableSort
             resizableColumns
+            selectionMode={Semester ? "multiple" : null}
+            selection={Semester ? selectedCourses : null}
+            onSelectionChange={(e) => setSelectedCourses(e.value)}
           >
+            {Semester && <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>}
             <Column field="CourseID" header="Ders Kodu" sortable></Column>
             <Column field="CourseName" header="Ders Adı" sortable></Column>
             <Column field="Akts" header="Akts/Kredi" sortable></Column>
           </DataTable>
         </div>
+        <Button label="Gönder" icon="pi pi-check" onClick={handleSubmit} className="mt-4" />
       </div>
-
     </SidebarLayout>
   );
 }
