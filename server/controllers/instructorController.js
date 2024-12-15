@@ -44,7 +44,6 @@ const getInstructorByID = async (req, res) => {
         res.status(404).send('An error occurred');
     }
 }
-
 // Create Instructor
 const createInstructor = async (req, res) => {
     try {
@@ -66,8 +65,6 @@ const createInstructor = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-
-
 // Update Instructor
 const updateInstructor = async (req, res) => {
     try {
@@ -94,7 +91,6 @@ const updateInstructor = async (req, res) => {
     }
 
 }
-
 // Delete Instructor
 const deleteInstructor = async (req, res) => {
     try {
@@ -108,11 +104,44 @@ const deleteInstructor = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
+// Add course to instructor
+const addCourseToInstructor = async (req, res) => {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('InstructorID', sql.Int, req.params.id)
+            .input('CourseID', sql.Int, req.body.CourseID)
+            .query(`INSERT INTO InstructorCourse (InstructorID, CourseID)
+                VALUES (@InstructorID, @CourseID)`);
+        res.status(201).json(result.recordset);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+}
+// Get connected courses
+const getConnectedCourses = async (req, res) => {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('InstructorID', sql.Int, req.params.id)
+            .query(`SELECT C.CourseID, C.CourseName, C.Akts, C.Semester, C.Class FROM InstructorCourse I
+            JOIN Courses C ON I.CourseID = C.CourseID
+            WHERE I.InstructorID = @InstructorID`);
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+}
+
 
 module.exports = {
     getAllInstructors,
     getInstructorByID,
     createInstructor,
     updateInstructor,
-    deleteInstructor
+    deleteInstructor,
+    addCourseToInstructor,
+    getConnectedCourses
 }

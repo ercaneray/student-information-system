@@ -7,6 +7,7 @@ import { ContextMenu } from 'primereact/contextmenu';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import { Dropdown } from 'primereact/dropdown';
 import { useAuthStore } from '../../store/authStore';
 import AddInstructorForm from './addForms/AddInstructor';
 
@@ -17,9 +18,15 @@ function InstructorList() {
     const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
     const [instructors, setInstructors] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [connectedCourses, setConnectedCourses] = useState([]);
     const [isError, setIsError] = useState(false);
     const [selectedInstructor, setSelectedInstructor] = useState(null);
+    const [selectedCourse, setSelectedCourse] = useState(null);
     const [isAddFormVisible, setIsAddFormVisible] = useState(false);
+    const [isConnectionsDialogVisible, setIsConnectionsDialogVisible] = useState(false);
+    const [isAddCourseDialogVisible, setIsAddCourseDialogVisible] = useState(false);
+
 
 
     const cm = useRef(null); // ContextMenu referansı
@@ -65,6 +72,42 @@ function InstructorList() {
             });
         }
     };
+    // Eğitmene ders ekleme
+    const handleAddCourse = async (CourseID) => {
+        try {
+            const response = await axios.post(
+                `http://localhost:5000/instructors/add-connection/${selectedInstructor.InstructorID}`,
+                { CourseID },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    withCredentials: true,
+                }
+            );
+            if (response.status === 201) {
+                toast.current.show({
+                    severity: 'success',
+                    summary: 'Başarılı',
+                    detail: `Ders eklendi: ${CourseID}`,
+                });
+            } else {
+                toast.current.show({
+                    severity: 'error',
+                    summary: 'Hata',
+                    detail: 'Ders eklenemedi. Lütfen tekrar deneyin.',
+                });
+            }
+        } catch (error) {
+            console.error("Ders ekleme hatası:", error);
+            toast.current.show({
+                severity: 'error',
+                summary: 'Hata',
+                detail: 'Bir hata oluştu. Ders eklenemedi.',
+            });
+        }
+    };
+
     const handleInstructorAdded = (newInstructor) => {
         setInstructors((prevInstructors) => [...prevInstructors, newInstructor]);
         setIsAddFormVisible(false); // Formu kapat
@@ -94,6 +137,42 @@ function InstructorList() {
         };
         getInstructors();
     }, []);
+    // Ders verilerini çek
+    const getCourses = async () => {
+        setCourses([]); // Dersleri sıfırla
+        try {
+            const response = await axios.get("http://localhost:5000/courses/get", {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            });
+            setCourses(response.data);
+        } catch (error) {
+            console.error("Error fetching courses:", error);
+            setIsError(true);
+        }
+    };
+    // Bağlı dersleri çek
+    const getConnections = async () => {
+        setConnectedCourses([]); // Bağlı dersleri sıfırla
+        try {
+            const response = await axios.get(
+                `http://localhost:5000/instructors/get-connections/${selectedInstructor.InstructorID}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    withCredentials: true,
+                }
+            );
+            setConnectedCourses(response.data);
+        } catch (error) {
+            console.error("Error fetching connections:", error);
+            setIsError(true);
+        }
+    };
+
 
     if (isCheckingAuth || isLoading) {
         return <div>Loading...</div>;
@@ -110,14 +189,19 @@ function InstructorList() {
     // ContextMenu için menü öğeleri
     const contextMenuItems = [
         {
-            label: 'Düzenle',
-            icon: 'pi pi-pencil',
-            command: () => {
-                toast.current.show({
-                    severity: 'warn',
-                    summary: 'Düzenle',
-                    detail: `Düzenleme işlemi: ${selectedInstructor.FirstName}`,
-                });
+            label: 'Bağlı dersleri görüntüle',
+            icon: 'pi pi-eye',
+            command: async () => {
+                await getConnections(); // API'den veriyi çek
+                setIsConnectionsDialogVisible(true); // Dialog'u aç
+            },
+        },
+        {
+            label: 'Ders ekle',
+            icon: 'pi pi-plus',
+            command: async () => {
+                await getCourses(); // Ders listesini çek
+                setIsAddCourseDialogVisible(true); // Dialog'u aç
             },
         },
         {
@@ -126,6 +210,7 @@ function InstructorList() {
             command: handleDelete,
         },
     ];
+
 
     return (
         <SidebarLayout RoleID={user.RoleID}>
@@ -144,7 +229,7 @@ function InstructorList() {
                     style={{ width: '30vw' }}
                     onHide={() => setIsAddFormVisible(false)}
                 >
-                    <AddInstructorForm onInstructorAdded={handleInstructorAdded}/>
+                    <AddInstructorForm onInstructorAdded={handleInstructorAdded} />
                 </Dialog>
                 <DataTable
                     value={instructors}
@@ -167,6 +252,58 @@ function InstructorList() {
                     <Column field="DepartmentName" header="Bölüm" sortable></Column>
                     <Column field="RoleName" header="Rol" sortable></Column>
                 </DataTable>
+                <Dialog
+                    header="Bağlı Dersler"
+                    visible={isConnectionsDialogVisible}
+                    style={{ width: '50vw' }}
+                    onHide={() => setIsConnectionsDialogVisible(false)}
+                >
+                    {connectedCourses.length > 0 ? (
+                        <DataTable value={connectedCourses} showGridlines>
+                            <Column field="CourseID" header="Ders ID"></Column>
+                            <Column field="CourseName" header="Ders Adı"></Column>
+                            <Column field="Akts" header="Akts/Kredi"></Column>
+                            <Column field="Semester" header="Dönem" body={(rowData) => (rowData.Semester ? "Bahar" : "Güz")}></Column>
+                            <Column field="Class" header="Sınıf"></Column>
+                        </DataTable>
+                    ) : (
+                        <p>Bağlı ders bulunmamaktadır.</p>
+                    )}
+                </Dialog>
+                <Dialog
+                    header="Ders Ekle"
+                    visible={isAddCourseDialogVisible}
+                    style={{ width: '30vw' }}
+                    onHide={() => setIsAddCourseDialogVisible(false)}
+                >
+                    <Dropdown
+                        value={null}
+                        options={courses} // Ders listesini options olarak veriyoruz
+                        onChange={(e) => setSelectedCourse(e.value)} // Seçilen ders ID'si
+                        optionLabel="CourseName"
+                        optionValue="CourseID"
+                        placeholder="Ders Seçiniz"
+                        className="w-full mb-10 mt-4"
+                        itemTemplate={(option) => (
+                            <div className="flex flex-col p-2 ">
+                                <div className="font-bold">{option.CourseName}</div>
+                                <small className="text-gray-600">
+                                    AKTS: {option.Akts} | Dönem: {option.Semester ? "Bahar" : "Güz"} | Sınıf: {option.Class}
+                                </small>
+                            </div>
+                        )}
+                    />
+                    <Button
+                        label="Dersi Ekle"
+                        icon="pi pi-check"
+                        className="w-full bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded shadow-md"
+                        onClick={() => {
+                            handleAddCourse(selectedCourse); // Seçilen dersi handleAddCourse ile gönderiyoruz
+                            setIsAddCourseDialogVisible(false); // Dialog'u kapat
+                        }}
+                        disabled={!selectedCourse} // Ders seçilmediğinde buton devre dışı
+                    />
+                </Dialog>
             </div>
         </SidebarLayout>
     );
