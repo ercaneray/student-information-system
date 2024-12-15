@@ -5,7 +5,10 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { ContextMenu } from 'primereact/contextmenu';
 import { Toast } from 'primereact/toast';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
 import { useAuthStore } from '../../store/authStore';
+import AddInstructorForm from './addForms/AddInstructor';
 
 function InstructorList() {
     const user = useAuthStore((state) => state.user);
@@ -16,6 +19,8 @@ function InstructorList() {
     const [instructors, setInstructors] = useState([]);
     const [isError, setIsError] = useState(false);
     const [selectedInstructor, setSelectedInstructor] = useState(null);
+    const [isAddFormVisible, setIsAddFormVisible] = useState(false);
+
 
     const cm = useRef(null); // ContextMenu referansı
     const toast = useRef(null); // Toast referansı
@@ -59,6 +64,11 @@ function InstructorList() {
                 detail: 'Bir hata oluştu. Eğitmen silinemedi.',
             });
         }
+    };
+    const handleInstructorAdded = (newInstructor) => {
+        setInstructors((prevInstructors) => [...prevInstructors, newInstructor]);
+        setIsAddFormVisible(false); // Formu kapat
+        console.log(newInstructor);
     };
 
     // Kullanıcı doğrulaması
@@ -123,6 +133,19 @@ function InstructorList() {
                 <Toast ref={toast} />
                 <ContextMenu model={contextMenuItems} ref={cm} />
                 <h1 className="text-2xl font-bold mb-4">Eğitmen Listesi</h1>
+                <Button
+                    label="Yeni Eğitmen Ekle"
+                    icon="pi pi-plus"
+                    className="mb-4"
+                    onClick={() => setIsAddFormVisible(true)}
+                />
+                <Dialog
+                    visible={isAddFormVisible}
+                    style={{ width: '30vw' }}
+                    onHide={() => setIsAddFormVisible(false)}
+                >
+                    <AddInstructorForm onInstructorAdded={handleInstructorAdded}/>
+                </Dialog>
                 <DataTable
                     value={instructors}
                     paginator

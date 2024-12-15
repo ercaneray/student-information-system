@@ -53,12 +53,12 @@ const createInstructor = async (req, res) => {
             .input('InstructorID', sql.Int, req.body.InstructorID)
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
-            .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
-            .input('Department', sql.VarChar, req.body.Department)
-            .input('Faculty', sql.VarChar, req.body.Faculty)
-            .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password, Department, Faculty)
-                VALUES (@InstructorID, @FirstName, @LastName, @Password, @Department, @Faculty)`);
-
+            .input('Password', sql.VarChar, req.body.Password)
+            .input('DepartmentID', sql.Int, req.body.DepartmentID)
+            .input('RoleID', sql.Int, req.body.RoleID)
+            .input('RequiredCourseID', sql.Int, req.body.RequiredCourseID)
+            .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password, DepartmentID, RoleID, RequiredCourseID)
+                VALUES (@InstructorID, @FirstName, @LastName, @Password, @DepartmentID, @RoleID, @RequiredCourseID)`);
         res.status(201).json(result.recordset);
 
     } catch (error) {

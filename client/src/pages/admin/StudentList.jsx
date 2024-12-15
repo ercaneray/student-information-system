@@ -6,6 +6,10 @@ import { Column } from 'primereact/column';
 import { ContextMenu } from 'primereact/contextmenu';
 import { Toast } from 'primereact/toast';
 import { useAuthStore } from '../../store/authStore';
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
+import AddStudentForm from './addForms/AddStudent';
+
 
 function StudentList() {
     const user = useAuthStore((state) => state.user);
@@ -16,6 +20,7 @@ function StudentList() {
     const [students, setStudents] = useState([]);
     const [isError, setIsError] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const [isAddFormVisible, setIsAddFormVisible] = useState(false);
 
     const cm = useRef(null); // ContextMenu referansı
     const toast = useRef(null); // Toast referansı
@@ -59,6 +64,11 @@ function StudentList() {
             });
         }
     }
+    const handleStudentAdded = (newStudent) => {
+        setStudents((prevStudents) => [...prevStudents, newStudent]);
+        setIsAddFormVisible(false); // Formu kapat
+        console.log(newStudent);
+    };
 
     // Kullanıcı doğrulaması
     useEffect(() => {
@@ -110,6 +120,7 @@ function StudentList() {
             icon: 'pi pi-trash',
             command: handleDelete
         },
+
     ];
 
     return (
@@ -118,6 +129,19 @@ function StudentList() {
                 <Toast ref={toast} />
                 <ContextMenu model={contextMenuItems} ref={cm} />
                 <h1 className="text-2xl font-bold mb-4">Öğrenci Listesi</h1>
+                <Button
+                    label="Yeni Öğrenci Ekle"
+                    icon="pi pi-plus"
+                    className="mb-4"
+                    onClick={() => setIsAddFormVisible(true)}
+                />
+                <Dialog
+                    visible={isAddFormVisible}
+                    style={{ width: '30vw' }}
+                    onHide={() => setIsAddFormVisible(false)}
+                >
+                    <AddStudentForm onStudentAdded={handleStudentAdded}/>
+                </Dialog>
                 <DataTable
                     value={students}
                     paginator

@@ -9,6 +9,7 @@ const courseRoutes = require('./routes/courseRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
 const authRoutes = require('./routes/authRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const departmentRoutes = require('./routes/departmentRoutes');
 
 const PORT = process.env.PORT;
 
@@ -25,6 +26,7 @@ app.use('/courses', courseRoutes);
 app.use('/instructors', instructorRoutes);
 app.use('/auth', authRoutes);
 app.use('/messages', messageRoutes);
+app.use('/departments', departmentRoutes);
 
 // Start server
 app.listen(PORT, () => {

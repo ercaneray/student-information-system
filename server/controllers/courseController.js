@@ -5,14 +5,22 @@ const config = require('../config/sqlconfig.js');
 const getAllCourses = async (req, res) => {
     try {
         let pool = await sql.connect(config);
-        let result = await pool.request().query(`SELECT [CourseID]
-      ,[CourseName]
-      ,[Akts]
-      ,[Semester]
-      ,[Class]
-      ,[RequiredCourseID]
-	  ,D.DepartmentName
-FROM Courses C LEFT JOIN Departments D ON C.DepartmentID = D.DepartmentID`);
+        let result = await pool.request().query(`SELECT 
+    C.[CourseID],
+    C.[CourseName],
+    C.[Akts],
+    C.[Semester],
+    C.[Class],
+    C.[RequiredCourseID],
+    RC.[CourseName] AS RequiredCourseName,
+    D.[DepartmentName]
+    FROM 
+        Courses C
+    LEFT JOIN 
+        Courses RC ON C.RequiredCourseID = RC.CourseID 
+    LEFT JOIN 
+        Departments D ON C.DepartmentID = D.DepartmentID;
+`);
         res.status(200).json(result.recordset);
     } catch (error) {
         console.error(error);
@@ -94,8 +102,11 @@ const createCourse = async (req, res) => {
             .input('CourseID', sql.Int, req.body.CourseID)
             .input('CourseName', sql.VarChar, req.body.CourseName)
             .input('Akts', sql.Int, req.body.Akts)
-            .query(`INSERT INTO Courses (CourseID, CourseName, Akts)
-                VALUES (@CourseID, @CourseName, @Akts)`);
+            .input('Semester', sql.Int, req.body.Semester)
+            .input('Class', sql.Int, req.body.Class)
+            .input('DepartmentID', sql.Int, req.body.DepartmentID)
+            .query(`INSERT INTO Courses (CourseID, CourseName, Akts, Semester, Class, DepartmentID)
+                VALUES (@CourseID, @CourseName, @Akts, @Semester, @Class, @DepartmentID)`);
         res.status(201).json(result.recordset);
     } catch (error) {
         console.error(error);

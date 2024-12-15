@@ -26,7 +26,6 @@ const getAllStudents = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-
 // Get student by ID
 const getStudentByID = async (req, res) => {
     try {
@@ -46,7 +45,6 @@ const getStudentByID = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-
 // Create student
 const createStudent = async (req, res) => {
     try {
@@ -55,20 +53,17 @@ const createStudent = async (req, res) => {
             .input('StudentID', sql.Int, req.body.StudentID)
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
-            .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
-            .input('Agno', sql.Decimal(3, 2), req.body.Agno)
-            .input('Faculty', sql.VarChar, req.body.Faculty)
-            .input('Department', sql.VarChar, req.body.Department)
+            .input('Password', sql.VarChar, req.body.Password, 10)
+            .input('DepartmentID', sql.Int, req.body.DepartmentID)
             .input('Class', sql.Int, req.body.Class)
-            .query(`INSERT INTO Students (StudentID, FirstName, LastName, Password, Agno, Faculty, Department, Class)
-                VALUES (@StudentID, @FirstName, @LastName, @Password, @Agno, @Faculty, @Department, @Class)`);
+            .query(`INSERT INTO Students (StudentID, FirstName, LastName, Password, DepartmentID, Class)
+                VALUES (@StudentID, @FirstName, @LastName, @Password, @DepartmentID, @Class)`);
         res.status(201).json(result.recordset);
     } catch (error) {
         console.error(error); // Hata detaylarını logla
         res.status(500).send('An error occurred');
     }
 }
-
 // Update student
 const updateStudent = async (req, res) => {
     try {
@@ -77,18 +72,14 @@ const updateStudent = async (req, res) => {
             .input('StudentID', sql.Int, req.body.StudentID)
             .input('FirstName', sql.NVarChar, req.body.FirstName)
             .input('LastName', sql.NVarChar, req.body.LastName)
-            .input('Password', sql.VarChar, bcrypt.hashSync(req.body.Password, 10))
-            .input('Agno', sql.Decimal(3, 2), req.body.Agno)
-            .input('Faculty', sql.VarChar, req.body.Faculty)
-            .input('Department', sql.VarChar, req.body.Department)
+            .input('Password', sql.VarChar, req.body.Password)
+            .input('DepartmentID', sql.Int, req.body.DepartmentID)
             .input('Class', sql.Int, req.body.Classs)
             .query(`UPDATE Students
                 SET FirstName = @FirstName, 
                     LastName = @LastName, 
                     Password = @Password, 
-                    Agno = @Agno, 
-                    Faculty = @Faculty, 
-                    Department = @Department, 
+                    DepartmentID = @DepartmentID, 
                     Class = @Class
                 WHERE StudentID = @StudentID`
             );
@@ -100,7 +91,6 @@ const updateStudent = async (req, res) => {
     }
 
 }
-
 // Delete student
 const deleteStudent = async (req, res) => {
     try {
