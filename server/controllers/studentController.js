@@ -45,6 +45,24 @@ const getStudentByID = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
+// Get students by Course connections
+const getStudentByCourseConnections = async (req, res) => {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('CourseID', sql.Int, req.params.id)
+            .query(`SELECT S.StudentID, S.FirstName, S.LastName, S.Class
+            FROM Students S
+            JOIN StudentCourse SC ON S.StudentID = SC.StudentID
+            WHERE SC.CourseID = @CourseID`
+            );
+        res.status(200).json(result.recordset);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+}
 // Create student
 const createStudent = async (req, res) => {
     try {
@@ -108,6 +126,7 @@ const deleteStudent = async (req, res) => {
 module.exports = {
     getAllStudents,
     getStudentByID,
+    getStudentByCourseConnections,
     createStudent,
     updateStudent,
     deleteStudent

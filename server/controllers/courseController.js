@@ -133,6 +133,28 @@ const updateCourse = async (req, res) => {
     }
 
 }
+// Update Course connection
+const updateCourseConnection = async (req, res) => {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('CourseID', sql.Int, req.params.id)
+            .input('Exam1Grade', sql.Int, req.body.Exam1Grade)
+            .input('Exam2Grade', sql.Int, req.body.Exam2Grade)
+            .input('LastLetterGrade', sql.VarChar, req.body.LastLetterGrade)
+            .query(`UPDATE StudentCourse
+                SET Exam1Grade = @Exam1Grade,
+                    Exam2Grade = @Exam2Grade,
+                    LastLetterGrade = @LastLetterGrade
+                WHERE CourseID = @CourseID`
+            );
+        res.status(200).json(result.recordset);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred');
+    }
+
+}
 // Delete Course
 const deleteCourse = async (req, res) => {
     try {
@@ -245,6 +267,7 @@ module.exports = {
     getPendingRequests,
     createCourse,
     updateCourse,
+    updateCourseConnection,
     deleteCourse,
     requestApproval,
     approveRequest,

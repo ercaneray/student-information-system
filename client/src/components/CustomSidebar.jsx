@@ -41,14 +41,14 @@ const CustomSidebar = ({ RoleID }) => {
     ],
     2: [
       { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
-      { name: "Sınav Notu Ekle", icon: <HiOutlineClipboardList />, route: "/course-list" },
+      { name: "Sınav Notu Ekle", icon: <HiOutlineClipboardList />, route: "/set-grades" },
       { name: "Mesajlar", icon: <AiFillMessage />, route: "/messages" },
       { name: "Çıkış", icon: <FaSignOutAlt />, onclick: handleLogout },
     ],
     3: [
       { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
       { name: "Ders Onayla", icon: <FaBook />, route: "/course-requests" },
-      { name: "Sınav Notu Ekle", icon: <HiOutlineClipboardList />, route: "/course-list" },
+      { name: "Sınav Notu Ekle", icon: <HiOutlineClipboardList />, route: "/set-grades" },
       { name: "Mesajlar", icon: <AiFillMessage />, route: "/messages" },
       { name: "Çıkış", icon: <FaSignOutAlt />, onclick: handleLogout },
     ]

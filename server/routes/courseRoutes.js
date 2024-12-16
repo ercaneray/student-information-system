@@ -7,6 +7,7 @@ const {
     getPendingRequests,
     createCourse,
     updateCourse,
+    updateCourseConnection,
     deleteCourse,
     requestApproval,
     approveRequest,
@@ -50,4 +51,7 @@ router.delete('/deny-request/:id', denyRequest);
 
 // GET Check request
 router.get('/check-request/:id', checkRequest);
+// PUT update course connection
+router.put('/update-connection/:id', updateCourseConnection);
+
 module.exports = router;
