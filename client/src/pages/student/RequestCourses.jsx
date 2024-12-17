@@ -14,8 +14,8 @@ function RequestCourses() {
 
   const [courses, setCourses] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
-  const Semester0 = courses.filter((course) => (course.Semester === 0) && (course.Class <= user.Class));
-  const Semester1 = courses.filter((course) => (course.Semester === 1) && (course.Class <= user.Class));
+  const Semester0Courses = courses.filter((course) => (course.Semester === 0) && (course.Class <= user.Class));
+  const Semester1Courses = courses.filter((course) => (course.Semester === 1) && (course.Class <= user.Class));
   const Semester = false;
   const AktsCredit = 20;
 
@@ -116,7 +116,7 @@ function RequestCourses() {
         <h1 className="text-2xl font-bold mb-4">Ders alma listesi | AKTS Limitiniz : 20</h1>
         <div className='flex space-x-20'>
           <DataTable
-            value={Semester0}
+            value={Semester0Courses}
             paginator
             stripedRows
             rows={7}
@@ -134,7 +134,7 @@ function RequestCourses() {
             <Column field="Akts" header="Akts/Kredi" sortable></Column>
           </DataTable>
           <DataTable
-            value={Semester1}
+            value={Semester1Courses}
             paginator
             stripedRows
             rows={7}

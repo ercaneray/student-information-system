@@ -42,7 +42,7 @@ function Grades() {
     return <div>Loading...</div>;
   }
 
-
+  console.log(grades);
   return (
     <SidebarLayout RoleID={user.RoleID}>
       <div className="datatable-responsive">
@@ -59,7 +59,8 @@ function Grades() {
         >
           <Column field="CourseID" header="Ders Kodu" sortable></Column>
           <Column field="CourseName" header="Ders Adı" sortable></Column>
-          <Column field="Akts" header="Akts/Kredi" sortable></Column>
+          <Column field="Exam1Grade" header="1. Sınav" sortable></Column>
+          <Column field="Exam2Grade" header="2. Sınav" sortable></Column>
         </DataTable>
       </div>
     </SidebarLayout>

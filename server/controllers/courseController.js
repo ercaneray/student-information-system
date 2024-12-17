@@ -63,12 +63,21 @@ const getStudentCourses = async (req, res) => {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('StudentID', sql.Int, req.params.id)
-            .query(`SELECT * FROM Courses 
-            WHERE CourseID IN (
-                SELECT CourseID FROM StudentCourse
-                WHERE StudentID = @StudentID
-            )`
-            );
+            .query(`SELECT
+                        SC.StudentID,
+                        SC.CourseID,
+                        C.CourseName,
+                        SC.Exam1Grade,
+                        SC.Exam2Grade,
+                        SC.LastLetterGrade,
+                        C.Akts,
+                        C.Semester,
+                        C.Class
+                    FROM
+                        StudentCourse SC
+                        JOIN Courses C ON SC.CourseID = C.CourseID
+                        WHERE SC.StudentID = @StudentID
+                    `);
         res.status(200).json(result.recordset);
     } catch (error) {
         console.error(error);

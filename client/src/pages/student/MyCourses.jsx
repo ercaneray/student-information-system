@@ -12,7 +12,7 @@ function MyCourses() {
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
   const [courses, setCourses] = useState([]);
-  const currentCourses = courses.filter((course) => course.Semester === 0);
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -45,10 +45,10 @@ function MyCourses() {
   return (
     <SidebarLayout RoleID={user.RoleID}>
       <div className="datatable-responsive">
-        <h1 className="text-2xl font-bold mb-4">Derslerim</h1>
-        <div >
+        <h1 className="text-2xl font-bold mb-4">Aldığım dersler</h1>
+        <div>
           <DataTable
-            value={currentCourses}
+            value={courses}
             paginator
             stripedRows
             rows={7}
@@ -60,7 +60,9 @@ function MyCourses() {
             <Column field="CourseID" header="Ders Kodu" sortable></Column>
             <Column field="CourseName" header="Ders Adı" sortable></Column>
             <Column field="Akts" header="Akts/Kredi" sortable></Column>
+            <Column field="LastLetterGrade" header="Harf Notu" sortable></Column>
           </DataTable>
+
         </div>
       </div>
 
