@@ -17,7 +17,6 @@ const getMessageByID = async (req, res) => {
         console.error(error);
     }
 }
-
 // Delete message by ID
 const deleteMessage = async (req, res) => {
     try {
@@ -33,7 +32,6 @@ const deleteMessage = async (req, res) => {
         console.error(error);
     }
 }
-
 // GET user's messages
 const getUserMessages = async (req, res) => {
     try {
@@ -49,7 +47,7 @@ const getUserMessages = async (req, res) => {
         console.error(error);
     }
 }
-
+// Create message
 const createMessage = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -74,9 +72,27 @@ const createMessage = async (req, res) => {
         return res.status(500).send('Internal server error');
     }
 };
+// GET all users except the current user
+const getAllNonAdminUsers = async (req, res) => {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .execute('sp_GetAllNonAdminUsers'); // Yeni stored procedure
+
+        if (result.recordset.length === 0) {
+            return res.status(404).send('No users found');
+        }
+
+        return res.status(200).json(result.recordset);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return res.status(500).send('Internal server error');
+    }
+};
 
 
 module.exports = {
+    getAllNonAdminUsers,
     getMessageByID,
     getUserMessages,
     deleteMessage,
