@@ -36,7 +36,6 @@ const CustomSidebar = ({ RoleID }) => {
       { name: "Agno Hesapla", icon: <MdCalculate />, route: "/calculator" },
       { name: "Sınavlar", icon: <HiOutlineClipboardList />, route: "/grades" },
       { name: "Mesajlar", icon: <AiFillMessage />, route: "/messages" },
-      { name: "Mezuniyet İşlemleri", icon: <HiOutlineClipboardList />, route: "/graduation" },
       { name: "Çıkış", icon: <FaSignOutAlt />, onclick: handleLogout },
     ],
     2: [

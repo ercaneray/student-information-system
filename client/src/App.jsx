@@ -17,7 +17,6 @@ import Dashboard from "./pages/Dashboard";
 // Student Pages
 import RequestCourses from "./pages/student/RequestCourses";
 import Mycourses from "./pages/student/MyCourses";
-import Graduation from "./pages/student/Graduation";
 import Calculator from "./pages/student/Calculator";
 import Grades from "./pages/student/Grades";
 // Instructor Pages
@@ -37,7 +36,6 @@ function App() {
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/request-courses" element={<RequestCourses />} />
         <Route path="/my-courses" element={<Mycourses />} />
-        <Route path="/graduation" element={<Graduation />} />
         <Route path="/grades" element={<Grades />} />
         {/* Instructor routes */}
         <Route path="/set-grades" element={<SetGrades />} />
