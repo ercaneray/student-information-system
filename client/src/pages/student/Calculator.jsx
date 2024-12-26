@@ -19,13 +19,20 @@ const letterGrades = [
 
 // Harf notu düzenleme bileşeni
 function gradeEditor(rowData, updateGrade) {
+  const dropdownClass = !rowData.LastLetterGrade || rowData.LastLetterGrade === ""
+    ? "bg-gray-100 text-gray-700" 
+    : rowData.LastLetterGrade === "FF"
+      ? "bg-red-500 text-white" 
+      : "bg-green-500 text-black"; 
   return (
     <Dropdown
       value={rowData.LastLetterGrade || ""}
       options={letterGrades}
+      optionLabel="label" // Hangi alanın etiketi göstereceğini belirtir
+      optionValue="value"
       onChange={(e) => updateGrade(rowData.index, e.value)}
       placeholder="Seçiniz"
-      className="w-full"
+      className={`w-full ${dropdownClass}`}
     />
   );
 }
@@ -133,9 +140,8 @@ function Calculator() {
                 return (
                   <SemesterTable
                     key={`class-${classNumber}-sem-${semester}`}
-                    header={`${classNumber}. Sınıf - ${
-                      semester === 0 ? "1. Dönem" : "2. Dönem"
-                    }`}
+                    header={`${classNumber}. Sınıf - ${semester === 0 ? "1. Dönem" : "2. Dönem"
+                      }`}
                     courses={filteredCourses}
                     updateGrade={updateGrade}
                   />

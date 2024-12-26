@@ -41,7 +41,7 @@ function Messages() {
         };
 
         fetchMessages();
-    }, [user]);
+    }, [user, messages]);
 
     // Kişi listesi oluştur
     useEffect(() => {
@@ -88,7 +88,11 @@ function Messages() {
 
     const startNewChat = () => {
         if (!selectedNewUser) return;
-
+        if (contacts.find((contact) => contact.id === selectedNewUser.UserID)) {
+            alert('Bu kişiyle zaten bir sohbet başlatılmış.');
+            return;
+        }
+        console.log(selectedNewUser);
         const newContact = {
             id: selectedNewUser.UserID,
             name: `${selectedNewUser.FirstName} ${selectedNewUser.LastName}`,
@@ -199,7 +203,7 @@ function Messages() {
                                 placeholder="Mesaj yazın..."
                                 className="w-full"
                             />
-                            <Button icon="pi pi-send" onClick={sendMessage} />
+                            <Button type='submit' icon="pi pi-send" onClick={sendMessage} />
                         </div>
                     )}
                 </div>
@@ -209,17 +213,18 @@ function Messages() {
                     header="Yeni Sohbet Oluştur"
                     visible={showNewChatDialog}
                     onHide={() => setShowNewChatDialog(false)}
+                    className='w-1/3'
                 >
                     <Dropdown
                         value={selectedNewUser}
                         options={allUsers}
                         onChange={(e) => setSelectedNewUser(e.value)}
-                        optionLabel="FullName"
+                        optionLabel={(option) => `${option.FirstName} ${option.LastName}`}
                         placeholder="Kişi seçin"
                         className="w-full mb-4 mt-2"
+                        itemTemplate={(option) => `${option.FirstName} ${option.LastName}`}
                     />
-
-                    <Button label="Başlat" icon="pi pi-check" onClick={startNewChat} />
+                    <Button label="Konuşmayı başlat" icon="pi pi-check" onClick={startNewChat} />
                 </Dialog>
             </div>
         </SidebarLayout>
