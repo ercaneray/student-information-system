@@ -5,22 +5,7 @@ const config = require('../config/sqlconfig.js');
 const getAllCourses = async (req, res) => {
     try {
         let pool = await sql.connect(config);
-        let result = await pool.request().query(`SELECT 
-    C.[CourseID],
-    C.[CourseName],
-    C.[Akts],
-    C.[Semester],
-    C.[Class],
-    C.[RequiredCourseID],
-    RC.[CourseName] AS RequiredCourseName,
-    D.[DepartmentName]
-    FROM 
-        Courses C
-    LEFT JOIN 
-        Courses RC ON C.RequiredCourseID = RC.CourseID 
-    LEFT JOIN 
-        Departments D ON C.DepartmentID = D.DepartmentID;
-`);
+        let result = await pool.request().execute('sp_GetAllCoursesWithDetails');
         res.status(200).json(result.recordset);
     } catch (error) {
         console.error(error);
@@ -91,11 +76,7 @@ const getPendingRequests = async (req, res) => {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('DepartmentID', sql.Int, req.params.id)
-            .query(`SELECT CR.RequestID, CR.StudentID, S.FirstName, S.LastName, C.CourseName, CR.CourseID, C.Akts, CR.DepartmentID FROM CourseRequests CR
-            JOIN Students S ON CR.StudentID = S.StudentID
-            JOIN Courses C ON CR.CourseID = C.CourseID
-            WHERE CR.DepartmentID = @DepartmentID`
-            );
+            .execute('sp_GetCourseRequestsByDepartment')
         res.status(200).json(result.recordset);
     } catch (error) {
         console.error(error);
