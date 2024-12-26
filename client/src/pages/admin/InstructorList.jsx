@@ -239,6 +239,8 @@ function InstructorList() {
                     className="p-datatable-md shadow-md"
                     showGridlines
                     removableSort
+                    sortField='InstructorID'
+                    sortOrder={1}
                     resizableColumns
                     contextMenuSelection={selectedInstructor}
                     onContextMenuSelectionChange={(e) => setSelectedInstructor(e.value)}

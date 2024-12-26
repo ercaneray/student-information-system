@@ -13,9 +13,11 @@ function RequestCourses() {
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
   const [courses, setCourses] = useState([]);
+  const filterByClass = user.Class === 1 ? courses.filter(course => course.Class === 1) : courses
+  const filterByAgno = user.Agno < 1.80 ? filterByClass.filter(course => course.Class <= user.Class) : filterByClass
   const [selectedCourses, setSelectedCourses] = useState([]);
-  const Semester0Courses = courses.filter((course) => (course.Semester === 0) && (course.Class <= user.Class));
-  const Semester1Courses = courses.filter((course) => (course.Semester === 1) && (course.Class <= user.Class));
+  const Semester0Courses = filterByAgno.filter((course) => (course.Semester === 0));
+  const Semester1Courses = filterByAgno.filter((course) => (course.Semester === 1));
   const Semester = false;
   const AktsCredit = 20;
 
@@ -113,7 +115,8 @@ function RequestCourses() {
   return (
     <SidebarLayout RoleID={user.RoleID}>
       <div className="datatable-responsive">
-        <h1 className="text-2xl font-bold mb-4">Ders alma listesi | AKTS Limitiniz : 20</h1>
+        <h1 className="text-2xl font-bold mb-4">Ders alma listesi | AKTS Limitiniz : 20 </h1>
+        {user.Agno < 1.80 ? <h2 className="text-xl mb-4">Agnonuz 1.80 in altında olduğu için üstten ders alamazsınız.</h2> : null}
         <div className='flex space-x-20'>
           <DataTable
             value={Semester0Courses}

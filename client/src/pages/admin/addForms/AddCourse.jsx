@@ -62,7 +62,6 @@ function AddCourseForm({ onCourseAdded }) {
     };
 
     const handleSubmit = async (e) => {
-        console.log(formData);
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:5000/courses/create', formData, {
@@ -71,15 +70,26 @@ function AddCourseForm({ onCourseAdded }) {
                 },
                 withCredentials: true,
             });
-
+    
             if (response.status === 201) {
                 toast.current.show({
                     severity: 'success',
                     summary: 'Başarılı',
                     detail: 'Ders başarıyla eklendi.',
                 });
-                onCourseAdded(...formData, departments.find((department) => department.DepartmentID === formData.DepartmentID).DepartmentName);
-
+    
+                // Bölüm adını al
+                const departmentName = departments.find(
+                    (department) => department.DepartmentID === formData.DepartmentID
+                )?.DepartmentName || 'Bilinmeyen Bölüm';
+    
+                // Yeni ders verilerini bildir
+                onCourseAdded({
+                    ...formData,
+                    DepartmentName: departmentName,
+                });
+    
+                // Formu sıfırla
                 setFormData({
                     CourseID: '',
                     CourseName: '',
@@ -87,7 +97,7 @@ function AddCourseForm({ onCourseAdded }) {
                     Semester: '',
                     Class: '',
                     DepartmentID: 0,
-                    RequiredCourse: null,
+                    RequiredCourseID: null,
                 });
             } else {
                 toast.current.show({
@@ -97,7 +107,7 @@ function AddCourseForm({ onCourseAdded }) {
                 });
             }
         } catch (error) {
-            console.error(error);
+            console.error('Ders ekleme sırasında hata oluştu:', error);
             toast.current.show({
                 severity: 'error',
                 summary: 'Hata',
@@ -105,6 +115,7 @@ function AddCourseForm({ onCourseAdded }) {
             });
         }
     };
+    
     return (
         <div className="p-4">
             <Toast ref={toast} />

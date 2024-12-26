@@ -51,7 +51,6 @@ function AddInstructorForm({ onInstructorAdded }) {
                 },
                 withCredentials: true,
             });
-
             if (response.status === 201) {
                 toast.current.show({
                     severity: 'success',
@@ -76,8 +75,8 @@ function AddInstructorForm({ onInstructorAdded }) {
                 });
             }
         } catch (error) {
-            console.error(error);
-            console.log(formData)
+            console.log(formData);
+
             toast.current.show({
                 severity: 'error',
                 summary: 'Hata',
@@ -85,7 +84,6 @@ function AddInstructorForm({ onInstructorAdded }) {
             });
         }
     };
-    console.log(formData);
 
     return (
         <div className="p-4">

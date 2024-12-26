@@ -61,9 +61,8 @@ function CourseList() {
         }
     };
     const handleCourseAdded = (newCourse) => {
-        setInstructors((prevCourses) => [...prevCourses, newCourse]);
+        setCourses((prevCourses) => [...prevCourses, newCourse]);
         setIsAddFormVisible(false); // Formu kapat
-        console.log(newCourse);
     };
 
     // Kullanıcı doğrulaması
@@ -89,7 +88,6 @@ function CourseList() {
         };
         getCourses();
     }, []);
-    console.log(courses);
     if (isCheckingAuth || isLoading) {
         return <div>Loading...</div>;
     }
@@ -148,6 +146,8 @@ function CourseList() {
                     className="p-datatable-md shadow-md"
                     showGridlines
                     removableSort
+                    sortField='CourseID'
+                    sortOrder={1}
                     resizableColumns
                     contextMenuSelection={selectedCourse}
                     onContextMenuSelectionChange={(e) => setSelectedCourse(e.value)}

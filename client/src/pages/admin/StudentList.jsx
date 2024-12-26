@@ -151,12 +151,14 @@ function StudentList() {
                     showGridlines
                     removableSort
                     resizableColumns
+                    sortField='StudentID'
+                    sortOrder={1}
                     contextMenuSelection={selectedStudent}
                     onContextMenuSelectionChange={(e) => setSelectedStudent(e.value)}
                     onContextMenu={(e) => cm.current.show(e.originalEvent)}
                     rowHover={true}
                 >
-                    <Column field="StudentID" header="ID" sortable></Column>
+                    <Column field="StudentID" header="ID" sortable ></Column>
                     <Column field="FirstName" header="Adı" sortable></Column>
                     <Column field="LastName" header="Soyadı" sortable></Column>
                     <Column field="Agno" header="AGNO" sortable></Column>

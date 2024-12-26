@@ -55,9 +55,8 @@ const createInstructor = async (req, res) => {
             .input('Password', sql.VarChar, req.body.Password)
             .input('DepartmentID', sql.Int, req.body.DepartmentID)
             .input('RoleID', sql.Int, req.body.RoleID)
-            .input('RequiredCourseID', sql.Int, req.body.RequiredCourseID)
-            .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password, DepartmentID, RoleID, RequiredCourseID)
-                VALUES (@InstructorID, @FirstName, @LastName, @Password, @DepartmentID, @RoleID, @RequiredCourseID)`);
+            .query(`INSERT INTO Instructors (InstructorID, FirstName, LastName, Password, DepartmentID, RoleID )
+                VALUES (@InstructorID, @FirstName, @LastName, @Password, @DepartmentID, @RoleID)`);
         res.status(201).json(result.recordset);
 
     } catch (error) {

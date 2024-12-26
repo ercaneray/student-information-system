@@ -48,15 +48,26 @@ function AddStudentForm({ onStudentAdded }) {
                 },
                 withCredentials: true,
             });
-
+    
             if (response.status === 201) {
                 toast.current.show({
                     severity: 'success',
                     summary: 'Başarılı',
                     detail: 'Öğrenci başarıyla eklendi.',
                 });
-                onStudentAdded(...formData , departments.find((department) => department.DepartmentID === formData.DepartmentID).DepartmentName);
-
+    
+                // Bölüm adını al
+                const departmentName = departments.find(
+                    (department) => department.DepartmentID === formData.DepartmentID
+                )?.DepartmentName || 'Bilinmeyen Bölüm';
+    
+                // Yeni öğrenci bilgilerini üst componente bildir
+                onStudentAdded({
+                    ...formData,
+                    DepartmentName: departmentName,
+                });
+    
+                // Formu sıfırla
                 setFormData({
                     StudentID: '',
                     FirstName: '',
@@ -73,16 +84,16 @@ function AddStudentForm({ onStudentAdded }) {
                 });
             }
         } catch (error) {
-            console.error(error);
+            console.error('Öğrenci ekleme sırasında hata oluştu:', error);
             toast.current.show({
                 severity: 'error',
                 summary: 'Hata',
-                detail: 'Bir hata oluştu. Öğrenci eklenemedi.',
+                detail: 'Bir hata oluştu. Lütfen tekrar deneyin.',
             });
         }
     };
-    console.log(departments);
-    console.log(formData);
+    
+
     return (
         <div className="p-4">
             <Toast ref={toast} />
