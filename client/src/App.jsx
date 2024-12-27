@@ -13,7 +13,6 @@ import CourseList from "./pages/admin/CourseList";
 // Student & Instructor Pages
 import PersonalInfo from "./pages/PersonalInfo";
 import Messages from "./pages/Messages";
-import Dashboard from "./pages/Dashboard";
 // Student Pages
 import RequestCourses from "./pages/student/RequestCourses";
 import Mycourses from "./pages/student/MyCourses";
@@ -47,11 +46,10 @@ function App() {
         <Route path="/instructors" element={<InstructorList />} />
         <Route path="/course-list" element={<CourseList />} />
         {/* Common routes*/}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/" element={<PersonalInfo />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/info" element={<PersonalInfo />} />
         <Route path="/messages" element={<Messages />} />
-        <Route path="*" element={<div>404 Not Found</div>} />
+        <Route path="*" element={<div>404 Page Not Found</div>} />
       </Routes>
     </div>
   );

@@ -181,39 +181,48 @@ const requestApproval = async (req, res) => {
 }
 // Ders onaylama
 const approveRequest = async (req, res) => {
-    try {
-        let pool = await sql.connect(config);
+    const { requests } = req.body;
 
-        // Transaction başlat
-        const transaction = new sql.Transaction(pool);
+    let pool;
+    const transaction = new sql.Transaction();
+
+    try {
+        pool = await sql.connect(config);
         await transaction.begin();
 
-        // StudentCourse tablosuna ekleme yap
-        await transaction.request()
-            .input('StudentID', sql.Int, req.body.StudentID)
-            .input('CourseID', sql.Int, req.body.CourseID)
-            .query(`INSERT INTO StudentCourse (StudentID, CourseID) 
-                VALUES (@StudentID, @CourseID)`);
+        for (const request of requests) {
+            // StudentCourse tablosuna ekle
+            await transaction.request()
+                .input('StudentID', sql.Int, request.StudentID)
+                .input('CourseID', sql.Int, request.CourseID)
+                .query(`
+                    INSERT INTO StudentCourse (StudentID, CourseID) 
+                    VALUES (@StudentID, @CourseID)
+                `);
 
-        // CourseRequests tablosundan silme işlemi yap
-        await transaction.request()
-            .input('RequestID', sql.Int, req.body.RequestID)
-            .query(`DELETE FROM CourseRequests
-                WHERE RequestID = @RequestID`);
+            // CourseRequests tablosundan sil
+            await transaction.request()
+                .input('RequestID', sql.Int, request.RequestID)
+                .query(`
+                    DELETE FROM CourseRequests
+                    WHERE RequestID = @RequestID
+                `);
+        }
 
-        // Eğer her şey başarılıysa transaction'ı commit et
         await transaction.commit();
 
-        res.status(200).json('Course approved successfully');
-
+        res.status(200).json({ message: 'Tüm istekler başarıyla onaylandı.' });
     } catch (error) {
-        // Bir hata oluşursa rollback yap
-        if (transaction) await transaction.rollback();
-
-        console.error(error);
-        res.status(500).send('An error occurred');
+        if (transaction._begun) await transaction.rollback();
+        console.error('Transaction sırasında hata oluştu:', error);
+        res.status(500).json({ message: 'Bir hata oluştu.', error: error.message });
+    } finally {
+        pool?.close();
     }
 };
+
+
+
 // Ders reddetme
 const denyRequest = async (req, res) => {
     try {

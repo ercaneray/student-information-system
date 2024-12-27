@@ -1,0 +1,21 @@
+190757031_ErayErcan Veri tabanı projesi çalıştırma talimatları:
+
+Öncelikle projem server ve client olarak ikiye ayrılıyor. İkisi de ayrı ayrı terminaller kullanılarak çalıştırılmalı.
+	Server kısmı node.js,
+	Client kısmı React ile oluşturulmuştur.
+	
+Server kısmını çalıştırma:
+	- Çalıştırılma ortamında node.js yüklü olmalı.
+	- Projenin ./server klasöründe terminale "npm start" komutunu girerek çalıştırılmalı.
+	
+Client kısmını çalıştırma:
+	- Projenin ./client klasöründe terminale "npm run dev" komutunu girerek çalıştırılmalı.
+	- Proje çalıştırılırken oluşturulan url portunun 3006 olduğundan emin olunmalı. (Terminalde görebilirsiniz)
+	
+Test için oluşturduğum deneme kullanıcıları:
+	-Admin -> Kullanıcı no: 1234 , Şifre: 1234 (Admin girişi yaptığınızda kendiniz öğrenci veya eğitmen eklebilirsiniz)
+	-Öğrenci -> Kullanıcı no: 100001, Şifre: 1234
+	-Eğitmen -> Kullanıcı no: 700001, Şifre: 1234
+	-Danışman eğitmen -> Kullanıcı no: 700003, Şifre: 1234
+	
+Projenin çalıştırılma dönemi güz dönemi olarak ayarlanmıştır. Ve ders seçimleri ona göre yapılmaktatır.

@@ -20,7 +20,7 @@ const app = express(); // Create express app
 // Middleware
 app.use(express.json({ credentials: true }));
 app.use(cookieParser());
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: 'http://localhost:3006', credentials: true }));
 
 // Routes
 app.use('/students', studentRoutes);

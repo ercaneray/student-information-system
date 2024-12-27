@@ -161,7 +161,7 @@ function SetGrades() {
                     <Column field="Akts" header="AKTS" sortable></Column>
                 </DataTable>
                 <Dialog
-                    header="Öğrenci Notları"
+                    header="Dersi alan öğrenciler"
                     visible={isStudentsVisible}
                     style={{ width: '50vw' }}
                     onHide={() => setIsStudentsVisible(false)}
@@ -190,7 +190,6 @@ function SetGrades() {
                 <Dialog
                     header="Not Gir"
                     visible={isGradeFormVisible}
-                    style={{ width: '50vw' }}
                     onHide={() => {
                         setIsGradeFormVisible(false);
                         setGrades({ Exam1Grade: null, Exam2Grade: null }); // Form sıfırlama

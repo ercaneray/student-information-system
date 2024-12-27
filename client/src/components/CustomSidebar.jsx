@@ -6,7 +6,7 @@ import { useAuthStore } from "../store/authStore";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserGraduate, FaBook, FaSignOutAlt, FaHome, FaChalkboardTeacher } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
-import { MdDashboard, MdCalculate } from "react-icons/md";
+import { MdCalculate } from "react-icons/md";
 import { AiFillMessage } from "react-icons/ai";
 import { HiOutlineClipboardList } from "react-icons/hi";
 
@@ -26,14 +26,12 @@ const CustomSidebar = ({ RoleID }) => {
   // Kullanıcı rollerine göre sidebar menüsü itemleri
   const menuItemsByRole = {
     0: [
-      { name: "Dashboard", route: "/dashboard", icon: <FaHome />, },
       { name: "Öğrenci Listesi", route: "/students", icon: <FaUserGraduate />, },
       { name: "Eğitmen Listesi", route: "/instructors", icon: <FaChalkboardTeacher />, },
       { name: "Ders Listesi", route: "/course-list", icon: <FaBook />, },
       { name: "Çıkış", onclick: handleLogout, icon: <FaSignOutAlt />, },
     ],
     1: [
-      { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
       { name: "Özlük bilgileri", icon: <FaUserGraduate />, route: "/info" },
       { name: "Ders Alma", icon: <FaBook />, route: "/request-courses" },
       { name: "Derslerim", icon: <HiOutlineClipboardList />, route: "/my-courses" },
@@ -43,13 +41,11 @@ const CustomSidebar = ({ RoleID }) => {
       { name: "Çıkış", icon: <FaSignOutAlt />, onclick: handleLogout },
     ],
     2: [
-      { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
       { name: "Sınav Notu Ekle", icon: <HiOutlineClipboardList />, route: "/set-grades" },
       { name: "Mesajlar", icon: <AiFillMessage />, route: "/messages" },
       { name: "Çıkış", icon: <FaSignOutAlt />, onclick: handleLogout },
     ],
     3: [
-      { name: "Dashboard", icon: <MdDashboard />, route: "/dashboard" },
       { name: "Ders Onayla", icon: <FaBook />, route: "/course-requests" },
       { name: "Sınav Notu Ekle", icon: <HiOutlineClipboardList />, route: "/set-grades" },
       { name: "Mesajlar", icon: <AiFillMessage />, route: "/messages" },

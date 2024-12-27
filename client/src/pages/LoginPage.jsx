@@ -21,7 +21,7 @@ function LoginPage() {
   const onSubmit = async (data) => {
     try {
       await login(data.UserID, data.Password);
-      navigate('/dashboard');
+      navigate('/info');
     } catch (err) {
       setError('Hatalı kullanıcı numarası veya şifre.');
       console.error(err);
@@ -44,7 +44,7 @@ function LoginPage() {
               className={"w-full h-14 text-lg px-4 border-gray-300 rounded-lg"}
               onChange={(e) => setValue("UserID", e.target.value)}
             />
-            <label htmlFor="UserID">Öğrenci No</label>
+            <label htmlFor="UserID">Öğrenci, Admin veya Eğitmen No</label>
           </FloatLabel>
           {errors.UserID && <small className="p-error">{errors.UserID.message}</small>}
 

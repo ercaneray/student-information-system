@@ -46,31 +46,27 @@ function CourseRequests() {
     const handleSubmit = async () => {
         try {
             console.log(selectedRequests);
-            const promises = selectedRequests.map((request) => {
-                return axios.put(
-                    `http://localhost:5000/courses/approve-request`,
-                    {
-                        RequestID: request.RequestID,
-                        CourseID: request.CourseID,
-                        StudentID: request.StudentID,
+    
+            // Tüm istekleri tek bir API çağrısına gönder
+            const response = await axios.put(
+                `http://localhost:5000/courses/approve-request`, // Tek bir endpoint
+                { requests: selectedRequests }, // Tüm istekleri tek bir payload içinde gönder
+                {
+                    headers: {
+                        "Content-Type": "application/json",
                     },
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        withCredentials: true,
-                    }
-                );
-            });
-
-            // Tüm isteklerin tamamlanmasını bekle
-            const responses = await Promise.all(promises);
+                    withCredentials: true,
+                }
+            );
+    
+            // İstek başarılıysa filtreleme yap
             setRequests(requests.filter((request) => !selectedRequests.includes(request)));
-            console.log("Kurslar başarıyla gönderildi:", responses);
+            console.log("Kurslar başarıyla gönderildi:", response);
         } catch (error) {
             console.error("Kurs gönderme işlemi sırasında hata oluştu:", error);
         }
     };
+    
     const handleDelete = async () => {
         try {
             const promises = selectedRequests.map((request) => {

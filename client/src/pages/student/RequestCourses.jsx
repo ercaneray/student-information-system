@@ -1,12 +1,13 @@
 // Öğrencilerin ders almak için danışmanlara istek gönderdiği sayfa
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import SidebarLayout from '../../layouts/SidebarLayout';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { useAuthStore } from '../../store/authStore';
 import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
 
 function RequestCourses() {
   const user = useAuthStore((state) => state.user);
@@ -14,12 +15,9 @@ function RequestCourses() {
   const isLoading = useAuthStore((state) => state.isLoading);
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
-  const [courses, setCourses] = useState([]);
-  const filterByClass = user.Class === 1 ? courses.filter(course => course.Class === 1) : courses
-  const filterByAgno = user.Agno < 1.80 ? filterByClass.filter(course => course.Class <= user.Class) : filterByClass
   const [selectedCourses, setSelectedCourses] = useState([]);
-  const Semester0Courses = filterByAgno.filter((course) => (course.Semester === 0));
-  const Semester1Courses = filterByAgno.filter((course) => (course.Semester === 1));
+  const [Semester0Courses, setSemester0Courses] = useState([]);
+  const [Semester1Courses, setSemester1Courses] = useState([]);
   const Semester = false;
   const AktsCredit = 20;
 
@@ -39,13 +37,31 @@ function RequestCourses() {
           },
           withCredentials: true,
         });
-        setCourses(response.data);
+        // Kullanıcı sınıfına göre filtreleme
+        const filteredByClass = user.Class === 1
+          ? response.data.filter(course => course.Class === 1)
+          : response.data;
+
+        // Kullanıcının AGNO değerine göre filtreleme
+        const filteredByAgno = user.Agno < 1.80
+          ? filteredByClass.filter(course => course.Class <= user.Class)
+          : filteredByClass;
+
+        // 0. yarıyıl (Semester 0) derslerini ayarlama
+        setSemester0Courses(filteredByAgno.filter(course => course.Semester === 0));
+
+        // 1. yarıyıl (Semester 1) derslerini ayarlama
+        setSemester1Courses(filteredByAgno.filter(course => course.Semester === 1));
+
+
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
     getCourses();
   }, [user]);
+
+  const toast = useRef(null);
 
   const handleSubmit = async () => {
     if (selectedCourses.length === 0) {
@@ -54,7 +70,13 @@ function RequestCourses() {
     }
     console.log(selectedCourses)
     if (selectedCourses.reduce((acc, course) => acc + course.Akts, 0) > AktsCredit) {
-      console.log("Seçilen kurslar AKTS kredisini aşmaktadır.");
+      toast.current.show({
+        severity: 'error',
+        summary: 'Hata',
+        detail: 'Seçilen kursların toplam AKTS değeri 20\'den fazla olamaz.',
+        life: 3000,
+      });
+
       return;
     }
     try {
@@ -73,12 +95,23 @@ function RequestCourses() {
       });
 
       if (response.status === 201) {
-        console.log("Bu dönem için ders seçim isteğiniz gönderilmiş ve beklemede.");
+        toast.current.show({
+          severity: 'warn',
+          summary: 'Bilgi',
+          detail: 'Bu dönem için ders seçim isteğiniz gönderilmiş ve beklemede.',
+          life: 3000,
+        });
         return;
       } else if (response2.data.length > 0) {
-        console.log("Bu dönem için ders seçim isteğiniz gönderilmiş ve tamamlanmıştır.");
+        toast.current.show({
+          severity: 'info',
+          summary: 'Bilgi',
+          detail: 'Bu dönem için ders seçim isteğiniz gönderilmiş ve tamamlanmıştır.',
+          life: 3000,
+        });
         return;
-      } else {
+      }
+      else {
         try {
           // Seçilen kurslar için gerekli bilgileri içeren istekleri oluştur
           const promises = selectedCourses.map((course) => {
@@ -99,9 +132,19 @@ function RequestCourses() {
           });
           // Tüm isteklerin tamamlanmasını bekle
           const responses = await Promise.all(promises);
-          console.log("Kurslar başarıyla gönderildi:", responses);
+          toast.current.show({
+            severity: 'success',
+            summary: 'Başarılı',
+            detail: 'Tüm kurslar başarıyla gönderildi!',
+            life: 3000,
+          });
         } catch (error) {
-          console.error("Kurs gönderme işlemi sırasında hata oluştu:", error);
+          toast.current.show({
+            severity: 'error',
+            summary: 'Hata',
+            detail: 'Kurs gönderme işlemi sırasında bir sorun oluştu.',
+            life: 3000,
+          });
         }
       }
     } catch (error) {
@@ -118,7 +161,7 @@ function RequestCourses() {
     <SidebarLayout RoleID={user.RoleID}>
       <div className="datatable-responsive">
         <h1 className="text-2xl font-bold mb-4">Ders alma listesi | AKTS Limitiniz : 20 </h1>
-        {user.Agno < 1.80 ? <h2 className="text-xl mb-4">Agnonuz 1.80 in altında olduğu için üstten ders alamazsınız.</h2> : null}
+        {user.Agno && (user.Agno < 1.80) ? <h2 className="text-xl mb-4">Agnonuz 1.80 in altında olduğu için üstten ders alamazsınız.</h2> : null}
         <div className='flex space-x-20'>
           <DataTable
             value={Semester0Courses}
@@ -138,6 +181,7 @@ function RequestCourses() {
             <Column field="CourseName" header="Ders Adı" sortable></Column>
             <Column field="Akts" header="Akts/Kredi" sortable></Column>
           </DataTable>
+          <Toast ref={toast} />
           <DataTable
             value={Semester1Courses}
             paginator

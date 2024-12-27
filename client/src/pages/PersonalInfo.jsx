@@ -23,7 +23,7 @@ const PersonalInfo = () => {
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-6">Özlük Bilgileri</h2>
         <div className="space-y-4 text-gray-700">
-          <p><span className="font-semibold">Ad Soyad:</span> {user.FirstName + " " + user.LastName} </p>
+          <p><span className="font-semibold">Ad Soyad:</span> {user.FirstName ? user.FirstName + " " + user.LastName : "Admin"} </p>
           <p><span className="font-semibold">Öğrenci Numarası:</span> {user.UserID} </p>
           <p><span className="font-semibold">Bölüm:</span> {user.DepartmentName} </p>
           <p><span className="font-semibold">Sınıf:</span> {user.Class} </p>
