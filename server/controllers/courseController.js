@@ -33,8 +33,7 @@ const getCourseByDepartmentID = async (req, res) => {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('DepartmentID', sql.Int, req.params.id)
-            .query(`SELECT * FROM Courses 
-            WHERE DepartmentID = @DepartmentID`
+            .query(`SELECT * FROM GetCourseByDepartmentID (@DepartmentID)`
             );
         res.status(200).json(result.recordset);
     } catch (error) {

@@ -23,8 +23,7 @@ const getStudentByID = async (req, res) => {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('StudentID', sql.Int, req.params.id)
-            .query(`SELECT * FROM Students 
-            WHERE StudentID = @StudentID`
+            .query(`SELECT * FROM GetStudentByID(@StudentID)`
             );
         const sanitizedStudents = result.recordset.map(student => {
             delete student.Password; // Şifre alanını kaldır
@@ -36,17 +35,13 @@ const getStudentByID = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// GET ID'ye göre öğrencinin bağlı olduğu dersleri getirme
+// GET ID'ye göre derslerin öğrencilerini getirme
 const getStudentByCourseConnections = async (req, res) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('CourseID', sql.Int, req.params.id)
-            .query(`SELECT S.StudentID, S.FirstName, S.LastName, S.Class
-            FROM Students S
-            JOIN StudentCourse SC ON S.StudentID = SC.StudentID
-            WHERE SC.CourseID = @CourseID`
-            );
+            .query(`SELECT * FROM GetStudentsByCourse(@CourseID)`);
         res.status(200).json(result.recordset);
     }
     catch (error) {

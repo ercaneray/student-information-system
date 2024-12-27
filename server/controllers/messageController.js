@@ -57,16 +57,14 @@ const createMessage = async (req, res) => {
             .input('Message', sql.NVarChar, req.body.Message)
             .query(`
                 INSERT INTO Messages (SenderID, ReceiverID, Message) 
-                OUTPUT INSERTED.MessageID, INSERTED.SenderID, INSERTED.ReceiverID, INSERTED.Message, INSERTED.Date
                 VALUES (@SenderID, @ReceiverID, @Message)
             `);
-
-        if (result.recordset.length === 0) {
+        ;
+        if (result.rowsAffected[0] > 0) {
+            return res.status(201).send('Message created successfully');
+        } else {
             return res.status(400).send('Message not created');
         }
-
-        // Yeni mesajın detaylarını döndür
-        return res.status(201).json(result.recordset[0]);
     } catch (error) {
         console.error(error);
         return res.status(500).send('Internal server error');
@@ -77,7 +75,7 @@ const getAllNonAdminUsers = async (req, res) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
-            .execute('sp_GetAllNonAdminUsers'); 
+            .execute('sp_GetAllNonAdminUsers');
 
         if (result.recordset.length === 0) {
             return res.status(404).send('No users found');
