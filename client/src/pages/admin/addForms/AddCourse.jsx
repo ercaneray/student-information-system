@@ -1,3 +1,4 @@
+// Courselist sayfasında kullandığım yeni ders ekleme formu
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Toast } from 'primereact/toast';

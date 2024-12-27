@@ -1,14 +1,13 @@
-const bcrypt = require('bcrypt');
 const sql = require('mssql');
 const config = require('../config/sqlconfig.js');
 const generateJWTToken = require('../utils/generateJWTToken');
-
+// Login işlemi için endpoint
 const login = async (req, res) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('UserID', sql.Int, req.body.UserID)
-            .execute('sp_FindUserInTables')
+            .execute('sp_FindUserInTables') // Buradaki sp'm ile kullanıcıyı bütün tablolarda arıyorum. Ve one göre girişe izin veriyorum.
         if (!result.recordset)
             return res.status(404).send('User not found');
         else {
@@ -35,7 +34,7 @@ const checkAuth = async (req, res) => {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('UserID', sql.Int, req.UserID)
-            .execute('sp_FindUserInTables')
+            .execute('sp_FindUserInTables') // Burada da kullanıcı hala veritabanında var mı diye kontrol ediyorum.
         const user = result.recordset[0];
         if (user)
             return res.status(200).json(user);

@@ -7,7 +7,7 @@ import "primereact/resources/primereact.min.css";  // Add this line
 import "primeicons/primeicons.css";
 import App from "./App.jsx";
 
-
+// React'ın ana bileşenlerinin olduğu dosya
 
 createRoot(document.getElementById("root")).render(
 

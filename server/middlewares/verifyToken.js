@@ -1,3 +1,5 @@
+// Giriş ve yetkilendirme işlemleri için jwt kütüphanesi ile tokenimi doğruluyorum
+
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 

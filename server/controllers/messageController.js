@@ -1,7 +1,7 @@
 const sql = require('mssql');
 const config = require('../config/sqlconfig.js');
 
-// Get message by ID
+// GET ID'ye göre mesaj getirme
 const getMessageByID = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -17,7 +17,7 @@ const getMessageByID = async (req, res) => {
         console.error(error);
     }
 }
-// Delete message by ID
+// DELETE ID'ye göre mesaj silme
 const deleteMessage = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -32,7 +32,7 @@ const deleteMessage = async (req, res) => {
         console.error(error);
     }
 }
-// GET user's messages
+// GET ID'ye göre kullanıcının mesajlarını getirme
 const getUserMessages = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -47,7 +47,7 @@ const getUserMessages = async (req, res) => {
         console.error(error);
     }
 }
-// Create message
+// POST Mesaj oluşturma
 const createMessage = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -72,12 +72,12 @@ const createMessage = async (req, res) => {
         return res.status(500).send('Internal server error');
     }
 };
-// GET all users except the current user
+// GET Tüm admin olmayan kullanıcıları getirme
 const getAllNonAdminUsers = async (req, res) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
-            .execute('sp_GetAllNonAdminUsers'); // Yeni stored procedure
+            .execute('sp_GetAllNonAdminUsers'); 
 
         if (result.recordset.length === 0) {
             return res.status(404).send('No users found');

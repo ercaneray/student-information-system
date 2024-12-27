@@ -1,3 +1,5 @@
+// Atuh işlemleri için route bilgileri
+
 const express = require('express');
 const { login, logout, checkAuth } = require('../controllers/authController');
 const verifyToken = require('../middlewares/verifyToken');

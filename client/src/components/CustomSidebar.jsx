@@ -1,7 +1,9 @@
+
+// Her sayfada kullandığım sidebar componenti. Kullanıcının rolüne göre sidebar menüsü değişiyor.
+
 import React, { useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate, useLocation } from "react-router-dom";
-// Icon imports
 import { FaUserGraduate, FaBook, FaSignOutAlt, FaHome, FaChalkboardTeacher } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { MdDashboard, MdCalculate } from "react-icons/md";
@@ -15,11 +17,13 @@ const CustomSidebar = ({ RoleID }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Çıkış işlemi
   const handleLogout = async () => {
     navigate("/login");
     await logout();
   };
 
+  // Kullanıcı rollerine göre sidebar menüsü itemleri
   const menuItemsByRole = {
     0: [
       { name: "Dashboard", route: "/dashboard", icon: <FaHome />, },
@@ -55,6 +59,7 @@ const CustomSidebar = ({ RoleID }) => {
 
   const menuItems = menuItemsByRole[RoleID] || [];
 
+  // Sidebar componenti
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}

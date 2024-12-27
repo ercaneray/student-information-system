@@ -1,3 +1,5 @@
+// Öğrencilerin ders almak için danışmanlara istek gönderdiği sayfa
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SidebarLayout from '../../layouts/SidebarLayout';

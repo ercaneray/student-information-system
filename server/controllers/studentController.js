@@ -1,9 +1,8 @@
 const sql = require('mssql');
 const config = require('../config/sqlconfig.js');
-const bcrypt = require('bcrypt');
 
 
-// GET all student
+// GET Bütün öğrencileri getirme
 const getAllStudents = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -18,7 +17,7 @@ const getAllStudents = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// Get student by ID
+// GET ID'ye göre öğrenci getirme
 const getStudentByID = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -37,7 +36,7 @@ const getStudentByID = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// Get students by Course connections
+// GET ID'ye göre öğrencinin bağlı olduğu dersleri getirme
 const getStudentByCourseConnections = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -55,7 +54,7 @@ const getStudentByCourseConnections = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// Create student
+// POST Öğrenci oluşturma
 const createStudent = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -74,7 +73,7 @@ const createStudent = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// Update student
+// UPDATE Öğrenci güncelleme
 const updateStudent = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -101,7 +100,7 @@ const updateStudent = async (req, res) => {
     }
 
 }
-// Delete student
+// DELETE Öğrenci silme
 const deleteStudent = async (req, res) => {
     try {
         let pool = await sql.connect(config);

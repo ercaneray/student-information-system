@@ -1,3 +1,5 @@
+// Dersleri listelediğim ve üzerinde işlemler yapılabilen admin sayfası
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import SidebarLayout from '../../layouts/SidebarLayout';
@@ -119,6 +121,7 @@ function CourseList() {
             command: handleDelete,
         },
     ];
+    // Ders listesini getirdiğim datatable componenti
     return (
         <SidebarLayout RoleID={user.RoleID}>
             <div className="datatable-responsive">

@@ -1,3 +1,5 @@
+// Eğitmenlerin derslere not girebileceği sayfa
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import SidebarLayout from '../../layouts/SidebarLayout';

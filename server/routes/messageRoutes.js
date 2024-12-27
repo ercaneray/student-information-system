@@ -1,3 +1,5 @@
+// Mesajlar için gerçekleştirilen CRUD işlemleri için route bilgileri
+
 const express = require('express');
 const router = express.Router();
 const { getAllNonAdminUsers, getMessageByID, getUserMessages, deleteMessage, createMessage } = require('../controllers/messageController');

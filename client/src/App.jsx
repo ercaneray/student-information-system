@@ -26,7 +26,8 @@ import CourseRequests from "./pages/advisor/CourseRequests";
 
 
 function App() {
-
+// Sayfalarımın yönlendirme işlemlerini yapabilmem için Routes ve Route componentleri
+// 
   return (
     <div className="bg-gray-100 min-h-screen">
       <Routes>

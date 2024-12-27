@@ -1,3 +1,5 @@
+// Kullanıcıların kendi bilgilerini gördüğü sayfa
+
 import React, { useEffect } from "react";
 import SidebarLayout from "../layouts/SidebarLayout";
 import { useAuthStore } from "../store/authStore";

@@ -1,3 +1,4 @@
+// Öğrencileri listelediğim ve üzerinde işlemler yapılabilen admin sayfası
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import SidebarLayout from '../../layouts/SidebarLayout';
@@ -124,6 +125,7 @@ function StudentList() {
     ];
 
     return (
+        // Öğrenci listesini getirdiğim datatable componenti
         <SidebarLayout RoleID={user.RoleID}>
             <div className="datatable-responsive">
                 <Toast ref={toast} />

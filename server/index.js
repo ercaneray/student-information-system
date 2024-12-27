@@ -1,3 +1,5 @@
+// Ana backend dosyam. Diğer klasördeki dosyaları bir yere topluyorum ve serverı başlatıyorum.
+
 require('dotenv').config();
 
 const express = require('express');

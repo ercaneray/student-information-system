@@ -1,3 +1,6 @@
+// Dersler ile gerçekleştirilen CRUD işlemleri için route bilgileri
+
+
 const express = require('express');
 const {
     getAllCourses,

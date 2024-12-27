@@ -1,7 +1,7 @@
 const sql = require('mssql');
 const config = require('../config/sqlconfig.js');
 
-// GET all Departments
+// GET Bütün bölümleri getirme
 
 const getAllDepartments = async (req, res) => {
     try {

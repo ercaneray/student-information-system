@@ -1,3 +1,6 @@
+// Öğrenciler için gerçekleştirilen CRUD işlemleri için route bilgileri
+
+
 const express = require('express');
 const {
     getAllStudents,

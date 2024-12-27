@@ -1,3 +1,5 @@
+// InstructorList sayfasında kullandığım yeni eğitmen ekleme formu
+
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Toast } from 'primereact/toast';

@@ -1,3 +1,5 @@
+// Agno hesaplama sayfası
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SidebarLayout from "../../layouts/SidebarLayout";
@@ -6,7 +8,7 @@ import { Column } from "primereact/column";
 import { Dropdown } from "primereact/dropdown";
 import { useAuthStore } from "../../store/authStore";
 
-// Dropdown seçenekleri (boş seçenek eklendi)
+// Anlık hesaplama için agno değerleri
 const letterGrades = [
   { label: "Seçiniz", value: "" },
   { label: "AA", value: "AA", point: 4.0 },
@@ -17,7 +19,7 @@ const letterGrades = [
   { label: "FF", value: "FF", point: 0.0 },
 ];
 
-// Harf notu düzenleme bileşeni
+// Harf notu dropdown'u
 function gradeEditor(rowData, updateGrade) {
   const dropdownClass = !rowData.LastLetterGrade || rowData.LastLetterGrade === ""
     ? "bg-gray-100 text-gray-700" 
@@ -37,7 +39,7 @@ function gradeEditor(rowData, updateGrade) {
   );
 }
 
-// Tekrarlanan DataTable için modüler komponent
+// Tekrarlanan DataTable için component
 function SemesterTable({ header, courses, updateGrade }) {
   return (
     <div className="mb-5">
@@ -98,13 +100,13 @@ function Calculator() {
     setCourses(updatedCourses);
   };
 
-  // Agno hesaplama (sadece not girilen dersleri hesaba kat)
+  // Agno hesaplama fonksiyonu
   const calculateAgno = () => {
     let totalPoints = 0;
     let totalAkts = 0;
 
     courses.forEach((course) => {
-      if (course.LastLetterGrade) { // Boş notları hesaba katma
+      if (course.LastLetterGrade) {
         const gradePoint =
           letterGrades.find((grade) => grade.value === course.LastLetterGrade)
             ?.point || 0;

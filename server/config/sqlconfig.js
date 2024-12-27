@@ -1,3 +1,5 @@
+// Sql server bağlantı ayarları
+
 const config = {
     server: 'localhost',       // sunucu adı
     database: 'db_obs',

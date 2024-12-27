@@ -1,3 +1,6 @@
+// zustand için store
+// auth işlemleri için kullanılan bir kütüphane
+
 import { create } from "zustand";
 import axios from "axios";
 

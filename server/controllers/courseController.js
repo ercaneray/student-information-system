@@ -1,7 +1,7 @@
 const sql = require('mssql');
 const config = require('../config/sqlconfig.js');
 
-// GET all Course
+// GET Bütün derleri getirme
 const getAllCourses = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -12,7 +12,7 @@ const getAllCourses = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// Get Course by ID
+// Get ID'ye göre ders getirme
 const getCourseByID = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -27,7 +27,7 @@ const getCourseByID = async (req, res) => {
         res.status(404).send('An error occurred');
     }
 }
-// Get Course by DepartmentID
+// GET Bölüm ID'ye göre ders getirme
 const getCourseByDepartmentID = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -42,7 +42,7 @@ const getCourseByDepartmentID = async (req, res) => {
         res.status(404).send('An error occurred');
     }
 }
-// Get a student's courses by studentID
+// GET Öğrencinin aldığı dersleri getirme
 const getStudentCourses = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -70,7 +70,7 @@ const getStudentCourses = async (req, res) => {
     }
 
 }
-// Get pending approval courses by DepartmentID
+// GET Bölüm ID'ye göre onay bekleyen dersleri getirme
 const getPendingRequests = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -84,7 +84,7 @@ const getPendingRequests = async (req, res) => {
     }
 
 }
-// Create Course
+// POST Ders oluşturma
 const createCourse = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -103,7 +103,7 @@ const createCourse = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// Update Course
+// UPDATE Ders güncelleme
 const updateCourse = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -123,12 +123,14 @@ const updateCourse = async (req, res) => {
     }
 
 }
-// Update Course connection
+// UPDATE Öğrencinin aldığı dersin notlarını güncelleme
 const updateCourseConnection = async (req, res) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
+
             .input('CourseID', sql.Int, req.params.id)
+            .input('StudentID', sql.Int, req.body.StudentID)
             .input('Exam1Grade', sql.Int, req.body.Exam1Grade)
             .input('Exam2Grade', sql.Int, req.body.Exam2Grade)
             .input('LastLetterGrade', sql.VarChar, req.body.LastLetterGrade)
@@ -136,7 +138,7 @@ const updateCourseConnection = async (req, res) => {
                 SET Exam1Grade = @Exam1Grade,
                     Exam2Grade = @Exam2Grade,
                     LastLetterGrade = @LastLetterGrade
-                WHERE CourseID = @CourseID`
+                WHERE CourseID = @CourseID AND StudentID = @StudentID`
             );
         res.status(200).json(result.recordset);
     } catch (error) {
@@ -145,7 +147,7 @@ const updateCourseConnection = async (req, res) => {
     }
 
 }
-// Delete Course
+// DELETE Ders silme
 const deleteCourse = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -158,7 +160,7 @@ const deleteCourse = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// Request Approval
+// POST Dersi onaya gönderme
 const requestApproval = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -178,7 +180,7 @@ const requestApproval = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// Approve Course Request
+// Ders onaylama
 const approveRequest = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -213,7 +215,7 @@ const approveRequest = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 };
-// Deny Course Request
+// Ders reddetme
 const denyRequest = async (req, res) => {
     try {
         let pool = await sql.connect(config);
@@ -231,7 +233,7 @@ const denyRequest = async (req, res) => {
         res.status(500).send('An error occurred');
     }
 }
-// Check Request
+// GET Öğrencinin ders talebini kontrol etme
 const checkRequest = async (req, res) => {
     try {
         let pool = await sql.connect(config);

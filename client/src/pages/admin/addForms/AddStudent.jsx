@@ -1,3 +1,4 @@
+// StudentList sayfasında kullandığım yeni öğrenci ekleme formu
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Toast } from 'primereact/toast';

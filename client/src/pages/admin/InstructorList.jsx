@@ -1,3 +1,4 @@
+// Eğitmenleri listelediğim ve üzerinde işlemler yapılabilen admin sayfası
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import SidebarLayout from '../../layouts/SidebarLayout';
@@ -213,6 +214,7 @@ function InstructorList() {
 
 
     return (
+        // Eğitmen listesini getirdiğim datatable componenti ve sayfanın devamı
         <SidebarLayout RoleID={user.RoleID}>
             <div className="datatable-responsive">
                 <Toast ref={toast} />

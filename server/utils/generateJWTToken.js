@@ -1,3 +1,5 @@
+// JWT token oluşturma
+
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const generateJWTToken = (res, user) => {

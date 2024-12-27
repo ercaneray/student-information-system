@@ -1,3 +1,6 @@
+// Öğrencilerin ders isteklerini görüntüleyip onaylama ve reddetme işlemlerini yapabileceğiniz sayfa
+// Bu sayfa danışmanlara özel!!
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SidebarLayout from '../../layouts/SidebarLayout';
