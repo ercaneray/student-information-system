@@ -1,4 +1,4 @@
-# Student Information System
+# Student Information System (Turkish UI)
 
 A comprehensive web application that serves as a modern student information system, providing various features for students, instructors, and administrators.
 
