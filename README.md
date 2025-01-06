@@ -38,6 +38,16 @@ A comprehensive web application that serves as a modern student information syst
 - MS SQL Server
 - JWT (Authentication)
 
-## Installation
+## Screenshots
 
-1. Clone the repository
+### Admin Panel
+![Admin Panel](https://github.com/ercaneray/student-information-system/blob/main/images/adminpanel.png?raw=true)
+
+### Admin CRUD
+![Admin CRUD](https://github.com/ercaneray/student-information-system/blob/main/images/adminaddform.png?raw=true)
+
+### GPA Calculator
+![Calculator](https://github.com/ercaneray/student-information-system/blob/main/images/calculator.png?raw=true)
+
+### Messages
+![Messages](https://github.com/ercaneray/student-information-system/blob/main/images/messages.png?raw=true)
